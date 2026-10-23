@@ -1,0 +1,996 @@
+﻿<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lắng Nghe An Toàn – Phòng Ngừa Bạo Lực Học Đường (HCT)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#e6f4fe',
+                            100: '#cce9fd',
+                            500: '#0077b6',
+                            600: '#023e8a',
+                            900: '#03045e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-slate-100 text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+    <!-- TOP HEADER WITH LOGO -->
+    <header class="bg-gradient-to-r from-brand-900 via-brand-600 to-sky-700 text-white shadow-lg sticky top-0 z-40 border-b border-sky-900/20 backdrop-blur-md bg-opacity-95">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3.5">
+                <!-- Logo Image HCT -->
+                <div class="bg-white p-1 rounded-xl shadow-md flex items-center justify-center w-11 h-11 flex-shrink-0 overflow-hidden">
+                    <img src="691217120_1298739952366171_8297374699157453375_n_3.jpg" alt="Logo HCT" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLmfPbtvTWuTWMCcCZ92SAepDUDGJCFjI5NPQ9dhvXMA&s=10';">
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">LẮNG NGHE AN TOÀN</h1>
+                        <span class="hidden sm:inline-block bg-sky-500/30 text-sky-200 text-[10px] px-2 py-0.5 rounded-full font-medium border border-sky-400/30">HCT - TP.HCM</span>
+                    </div>
+                    <p class="text-xs text-sky-100/80 font-medium">Cổng tiếp nhận phản ánh & hỗ trợ phòng ngừa bạo lực học đường</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openEmergencyModal()" class="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 animate-pulse">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span class="hidden sm:inline">Khẩn cấp</span>
+                </button>
+                <button onclick="openLookupModal()" class="bg-sky-500/20 hover:bg-sky-500/30 active:scale-95 text-sky-100 hover:text-white text-xs font-semibold px-3 py-2 rounded-xl transition border border-sky-300/30 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
+                    <span>Tra cứu mã</span>
+                </button>
+                <button onclick="openAdminLogin()" class="bg-white/10 hover:bg-white/20 active:scale-95 text-sky-100 hover:text-white text-xs font-semibold px-3 py-2 rounded-xl transition border border-white/20 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-lock text-[10px]"></i>
+                    <span>Quản trị</span>
+                    <span id="liveBadgeHeader" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow">
+
+        <!-- CLOUD SYNC STATUS BAR -->
+        <div class="mb-4 flex items-center justify-between bg-white/80 backdrop-blur px-4 py-2.5 rounded-2xl border border-slate-200/80 shadow-sm text-xs">
+            <div class="flex items-center space-x-2">
+                <span id="syncStatusDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+                <span id="syncStatusText" class="font-semibold text-slate-600">Đang kết nối hệ thống đám mây...</span>
+            </div>
+            <span class="text-slate-400 hidden sm:inline">Đồng bộ thời gian thực đa thiết bị (Điện thoại & Máy tính)</span>
+        </div>
+
+        <!-- HERO INTRO CARD -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-8 mb-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 bg-sky-50 rounded-full pointer-events-none opacity-50"></div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5">
+                <div class="bg-gradient-to-br from-sky-500 to-brand-600 text-white p-4 rounded-2xl shadow-md flex-shrink-0">
+                    <i class="fa-solid fa-hands-holding-child text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Chia sẻ an toàn & Bảo vệ học đường</h2>
+                    <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+                        Bạn có thể chia sẻ khi cảm thấy không an toàn, lo lắng hoặc chứng kiến hành vi bạo lực học đường. Thông tin của bạn được tiếp nhận và bảo mật theo quy trình xử lý chuyên nghiệp của nhà trường.
+                    </p>
+                </div>
+            </div>
+
+            <!-- EMERGENCY BANNER NOTICE -->
+            <div class="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 p-4 rounded-r-2xl border border-amber-200/60">
+                <div class="flex items-start space-x-3">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5 flex-shrink-0"></i>
+                    <div class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                        <strong class="font-bold text-amber-950">LƯU Ý QUAN TRỌNG:</strong> Biểu mẫu này <strong>không phải</strong> đường dây khẩn cấp trực 24/7. Nếu bạn hoặc người khác đang gặp nguy hiểm tức thời (bị tấn công, thương tích, đe dọa vũ lực...), hãy gọi ngay các số trợ giúp khẩn cấp bên dưới:
+                        <div class="mt-2.5 flex flex-wrap gap-2">
+                            <a href="tel:111" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-phone"></i> <span>111 (BV Trẻ em)</span>
+                            </a>
+                            <a href="tel:113" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-phone"></i> <span>113 (Công an)</span>
+                            </a>
+                            <a href="tel:115" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
+                                <i class="fa-solid fa-phone"></i> <span>115 (Cấp cứu)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORM CARD -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
+            <form id="reportForm" onsubmit="handleFormSubmit(event)" class="space-y-8">
+
+                <!-- QUESTION 1: ISSUE TYPE (FORM GROUP INTERACTIVE CARDS) -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-sm sm:text-base font-bold text-slate-900">
+                            1. Bạn đang phản ánh về vấn đề gì? <span class="text-rose-500">*</span>
+                        </label>
+                        <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-100">Chọn một hoặc nhiều</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Đánh dấu vào các vấn đề bạn hoặc người quen đang gặp phải trong môi trường học đường.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                        <!-- Option 1 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Bị đe dọa / Bắt nạt trực tiếp" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-user-shield text-brand-500 mr-2"></i> Bắt nạt / Đe dọa trực tiếp
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Bị cô lập, ép buộc, đe dọa tại lớp hoặc trường</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 2 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Bị xúc phạm, lăng mạ, bôi nhọ" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-comments text-amber-500 mr-2"></i> Lăng mạ / Xúc phạm
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Chế giễu, sỉ nhục, bôi nhọ danh dự cá nhân</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 3 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Xô xát, bạo lực thể chất" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-hand-fist text-rose-500 mr-2"></i> Xô xát / Bạo lực thể chất
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Đánh nhau, xô đẩy, gây tổn thương cơ thể</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 4 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Bắt nạt trên môi trường mạng" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-globe text-indigo-500 mr-2"></i> Bắt nạt trên mạng
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Tin nhắn đe dọa, nhóm chat ác ý, tung tin giả</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 5 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Lo ngại cho sự an toàn của người khác" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-heart-pulse text-emerald-500 mr-2"></i> Quan tâm người khác
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Phát hiện bạn bè hoặc học sinh khác gặp nguy cơ</span>
+                            </div>
+                        </label>
+
+                        <!-- Option 6 -->
+                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
+                            <div class="flex items-center h-5 mt-0.5">
+                                <input type="checkbox" name="issueType" value="Vấn đề an toàn học đường khác" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
+                                    <i class="fa-solid fa-circle-exclamation text-sky-500 mr-2"></i> Vấn đề an toàn khác
+                                </span>
+                                <span class="text-xs text-slate-500 mt-0.5 block">Các lo lắng khác về môi trường học tập</span>
+                            </div>
+                        </label>
+                    </div>
+                    <p id="issueError" class="text-xs text-rose-500 font-medium hidden pt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Vui lòng chọn ít nhất một vấn đề phản ánh.</p>
+                </div>
+
+                <!-- QUESTION 2: DESCRIPTION -->
+                <div class="space-y-2">
+                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="description">
+                        2. Mô tả chi tiết sự việc
+                    </label>
+                    <p class="text-xs text-slate-500">Không viết suy đoán hoặc thông tin quá nhạy cảm. Chỉ mô tả khách quan những gì bạn thấy hoặc trải qua.</p>
+                    <textarea id="description" rows="4" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Sự việc diễn ra như thế nào, có những ai chứng kiến, diễn biến ra sao..."></textarea>
+                </div>
+
+                <!-- QUESTION 3: TIME & LOCATION -->
+                <div class="space-y-2">
+                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="timeLocation">
+                        3. Thời gian và địa điểm xảy ra (nếu biết)
+                    </label>
+                    <input type="text" id="timeLocation" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Sáng thứ Hai (19/10/2026), tại khu vực hành lang lầu 2 nhà C...">
+                </div>
+
+                <!-- QUESTION 4: SEVERITY LEVEL -->
+                <div class="space-y-3">
+                    <label class="block text-sm sm:text-base font-bold text-slate-900">
+                        4. Bạn đánh giá mức độ tình hình hiện tại như thế nào? <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="space-y-2.5">
+                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition shadow-sm">
+                            <input type="radio" name="severity" value="Đang rất nguy hiểm / Cần can thiệp khẩn cấp" class="text-rose-600 focus:ring-rose-500 h-4 w-4 flex-shrink-0" required>
+                            <span class="ml-3 text-sm text-slate-800 font-semibold text-rose-700">Đang rất nguy hiểm / Cần can thiệp khẩn cấp ngay lập tức</span>
+                        </label>
+                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-300 hover:bg-amber-50/30 cursor-pointer transition shadow-sm">
+                            <input type="radio" name="severity" value="Sợ rằng sự việc tiếp tục leo thang hoặc bị trả đũa" class="text-brand-600 focus:ring-brand-500 h-4 w-4 flex-shrink-0">
+                            <span class="ml-3 text-sm text-slate-800 font-medium">Sợ rằng sự việc sẽ tiếp tục leo thang hoặc có nguy cơ bị trả đũa</span>
+                        </label>
+                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-sky-300 hover:bg-sky-50/30 cursor-pointer transition shadow-sm">
+                            <input type="radio" name="severity" value="Chưa có nguy hiểm ngay nhưng cần tư vấn/hỗ trợ" class="text-brand-600 focus:ring-brand-500 h-4 w-4 flex-shrink-0">
+                            <span class="ml-3 text-sm text-slate-800 font-medium">Chưa có nguy hiểm ngay, nhưng cần được tư vấn / hỗ trợ tâm lý</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTION 5: CONTACT PREFERENCE -->
+                <div class="space-y-3">
+                    <label class="block text-sm sm:text-base font-bold text-slate-900">
+                        5. Bạn có muốn người phụ trách liên hệ để hỗ trợ trực tiếp không? <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition shadow-sm">
+                            <input type="radio" name="wantContact" value="Có" onclick="toggleContactInfo(true)" class="text-brand-600 focus:ring-brand-500 h-4 w-4" required>
+                            <div class="ml-3">
+                                <span class="text-sm font-bold text-slate-900 block">Có, tôi muốn được hỗ trợ</span>
+                                <span class="text-xs text-slate-500">Cung cấp thông tin để giáo viên liên hệ</span>
+                            </div>
+                        </label>
+                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition shadow-sm">
+                            <input type="radio" name="wantContact" value="Chưa muốn" onclick="toggleContactInfo(false)" class="text-brand-600 focus:ring-brand-500 h-4 w-4">
+                            <div class="ml-3">
+                                <span class="text-sm font-bold text-slate-900 block">Chưa muốn</span>
+                                <span class="text-xs text-slate-500">Chỉ ghi nhận thông tin để nhà trường nắm tình hình</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- CONDITIONAL CONTACT DETAILS CONTAINER -->
+                <div id="contactInfoContainer" class="hidden space-y-2 bg-sky-50/60 p-5 rounded-2xl border-2 border-sky-100 transition-all duration-300">
+                    <label class="block text-sm font-bold text-brand-900" for="contactDetails">
+                        Thông tin liên hệ của bạn <span class="text-rose-500">*</span>
+                    </label>
+                    <p class="text-xs text-sky-800">Họ và tên (hoặc biệt danh an toàn), Lớp, Số điện thoại / Zalo hoặc cách tốt nhất để nhà trường liên hệ bảo mật với bạn.</p>
+                    <input type="text" id="contactDetails" class="w-full rounded-xl border-2 border-sky-200 bg-white p-3.5 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Đinh Đức Thắng - Trường CĐ Công Nghệ TP.HCM - SĐT: 0931xxxxxx">
+                </div>
+
+                <!-- QUESTION 6: ADDITIONAL COMMENTS -->
+                <div class="space-y-2">
+                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="additionalInfo">
+                        6. Bạn có muốn chia sẻ thêm điều gì để nhà trường giúp bạn cảm thấy an toàn hơn không?
+                    </label>
+                    <textarea id="additionalInfo" rows="3" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ý kiến đóng góp hoặc đề xuất giúp cải thiện môi trường học đường an toàn..."></textarea>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="pt-4">
+                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-brand-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 active:scale-[0.99] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center space-x-2.5 text-base disabled:opacity-60">
+                        <i class="fa-solid fa-paper-plane" id="submitBtnIcon"></i>
+                        <span id="submitBtnText">Gửi Phản Ánh An Toàn</span>
+                    </button>
+                    <p class="text-center text-xs text-slate-400 mt-3 font-medium">Đề xuất dự án nhóm tác giả Đinh Đức Thắng – Trường Cao Đẳng Công Nghệ TP.HCM (2026).</p>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto px-4 space-y-1">
+            <p class="font-bold text-slate-700">Mô hình "Lắng Nghe An Toàn" – Cổng QR Phòng ngừa bạo lực học đường</p>
+            <p>Cuộc thi “Sáng tạo khoa học công nghệ và kỹ thuật” trong Giáo dục và Đào tạo năm 2026</p>
+            <p class="text-[11px] text-slate-400 pt-1">Nhóm tác giả: Đinh Đức Thắng (Trưởng nhóm), Trần Tài Lộc, Lê Ninh Thuận – Trường Cao Đẳng Công Nghệ TP.HCM</p>
+        </div>
+    </footer>
+
+    <!-- SUCCESS POPUP MODAL -->
+    <div id="successModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5 text-center transform transition-all">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-inner">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Gửi phản ánh thành công!</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">Cảm ơn bạn đã dũng cảm lên tiếng vì một môi trường học đường lành mạnh, an toàn.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200/80 space-y-1.5 shadow-sm">
+                <span class="text-xs text-slate-500 font-semibold block uppercase tracking-wider">Mã theo dõi phản ánh của bạn</span>
+                <div class="flex items-center justify-center space-x-2">
+                    <span id="generatedCode" class="text-xl font-mono font-extrabold text-brand-600 tracking-widest">PA-2026-001</span>
+                    <button onclick="copyTrackingCode()" class="text-xs bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg font-medium transition" title="Sao chép mã">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                </div>
+                <p id="copyNotice" class="text-[11px] text-emerald-600 font-semibold hidden">Đã sao chép mã vào bộ nhớ tạm!</p>
+                <p class="text-[11px] text-amber-700 mt-1 bg-amber-50 py-1 px-2 rounded-lg border border-amber-200">Dữ liệu đã được đồng bộ lên đám mây. Hãy lưu lại mã này để tra cứu tiến độ xử lý.</p>
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold py-3.5 rounded-2xl transition text-sm shadow-md">
+                Hoàn tất & Trở về trang chủ
+            </button>
+        </div>
+    </div>
+
+    <!-- TRACKING CODE LOOKUP MODAL -->
+    <div id="lookupModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-slate-900 text-lg flex items-center">
+                    <i class="fa-solid fa-magnifying-glass text-brand-600 mr-2"></i>Tra cứu trạng thái phản ánh
+                </h3>
+                <button onclick="closeLookupModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-500">Nhập mã phản ánh (ví dụ: <span class="font-mono font-bold text-slate-700">PA-2026-001</span>) để kiểm tra tiến độ nhà trường đang tiếp nhận và hỗ trợ.</p>
+            <div class="flex space-x-2">
+                <input type="text" id="lookupCodeInput" class="flex-grow rounded-2xl border-2 border-slate-200 p-3 text-sm font-mono uppercase focus:border-brand-500 outline-none" placeholder="Nhập mã PA-2026-XXX...">
+                <button onclick="handleLookupCode()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-5 rounded-2xl text-sm transition">Tìm</button>
+            </div>
+            <div id="lookupResultBox" class="hidden rounded-2xl border border-slate-200 p-4 bg-slate-50 space-y-2 text-xs">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- EMERGENCY MODAL -->
+    <div id="emergencyModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
+            <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-inner">
+                <i class="fa-solid fa-phone-volume"></i>
+            </div>
+            <div class="text-center space-y-1.5">
+                <h3 class="text-2xl font-extrabold text-slate-900">Hỗ Trợ Khẩn Cấp 24/7</h3>
+                <p class="text-xs text-slate-600">Nếu bạn hoặc người khác đang gặp nguy hiểm ngay lập tức, hãy gọi ngay:</p>
+            </div>
+            <div class="space-y-2.5">
+                <a href="tel:111" class="flex items-center justify-between p-4 bg-rose-50 hover:bg-rose-100 active:scale-98 rounded-2xl border-2 border-rose-200 text-rose-900 transition shadow-sm">
+                    <div>
+                        <span class="font-bold text-sm block">Tổng đài Bảo vệ Trẻ em</span>
+                        <span class="text-[11px] text-rose-700">Miễn phí 24/7</span>
+                    </div>
+                    <span class="font-black text-rose-600 text-xl">111</span>
+                </a>
+                <a href="tel:113" class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 active:scale-98 rounded-2xl border-2 border-slate-200 text-slate-900 transition shadow-sm">
+                    <div>
+                        <span class="font-bold text-sm block">Cảnh sát Phản ứng nhanh</span>
+                        <span class="text-[11px] text-slate-500">Trường hợp bạo lực nghiêm trọng</span>
+                    </div>
+                    <span class="font-black text-brand-600 text-xl">113</span>
+                </a>
+                <a href="tel:115" class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 active:scale-98 rounded-2xl border-2 border-slate-200 text-slate-900 transition shadow-sm">
+                    <div>
+                        <span class="font-bold text-sm block">Cấp cứu Y tế</span>
+                        <span class="text-[11px] text-slate-500">Trường hợp có thương tích</span>
+                    </div>
+                    <span class="font-black text-emerald-600 text-xl">115</span>
+                </a>
+            </div>
+            <button onclick="closeEmergencyModal()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-2xl transition text-sm">
+                Đóng cửa sổ
+            </button>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-slate-900 text-lg flex items-center">
+                    <i class="fa-solid fa-lock text-brand-600 mr-2"></i>Đăng nhập Quản trị
+                </h3>
+                <button onclick="closeAdminLogin()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">Khu vực dành cho cán bộ quản lý / giáo viên phụ trách để truy cập bảng quản lý phản ánh đồng bộ thời gian thực.</p>
+            <div class="space-y-3 pt-2">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu quản trị:</label>
+                    <input type="password" id="adminPasswordInput" onkeydown="if(event.key==='Enter') verifyAdminLogin()" class="w-full rounded-2xl border-2 border-slate-200 p-3.5 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none" placeholder="Nhập mật khẩu...">
+                    <p id="adminLoginError" class="text-xs text-rose-600 font-semibold mt-1.5 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Mật khẩu không đúng! Gợi ý: admin123</p>
+                </div>
+                <button onclick="verifyAdminLogin()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-2xl transition text-sm shadow-md">
+                    Truy cập Bảng Quản Trị
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD FULL SCREEN MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex flex-col hidden overflow-y-auto p-3 sm:p-6">
+        <div class="max-w-6xl w-full mx-auto bg-white rounded-3xl shadow-2xl flex flex-col my-auto overflow-hidden border border-slate-200">
+            <!-- Header -->
+            <div class="bg-brand-900 text-white px-6 py-4 flex justify-between items-center border-b border-brand-800">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-sky-500/20 p-2.5 rounded-xl text-sky-300">
+                        <i class="fa-solid fa-cloud-arrow-down text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="font-extrabold text-base sm:text-lg">Bảng Quản Trị Đám Mây Thời Gian Thực</h3>
+                            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center space-x-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span>LIVE SYNC</span>
+                            </span>
+                        </div>
+                        <p class="text-xs text-sky-200">Nhận phản ánh tức thì từ điện thoại học sinh • Mã thiết bị: <span id="currentUserIdDisplay" class="font-mono text-sky-100">...</span></p>
+                    </div>
+                </div>
+                <button onclick="closeAdminDashboard()" class="bg-brand-800 hover:bg-brand-700 text-white p-2.5 rounded-xl transition"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <!-- Body -->
+            <div class="p-5 sm:p-6 space-y-5 bg-slate-50 flex-grow">
+                <!-- Controls & Filters -->
+                <div class="flex justify-between items-center flex-wrap gap-3">
+                    <div class="flex items-center flex-wrap gap-2">
+                        <div class="flex items-center space-x-2 text-xs sm:text-sm text-slate-600 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-sm font-medium">
+                            <span>Tổng phản ánh:</span>
+                            <span class="font-black text-brand-600 text-base" id="totalReportsCount">0</span>
+                        </div>
+                        <!-- Filter by Severity -->
+                        <select id="filterSeverity" onchange="renderAdminTable()" class="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 shadow-sm outline-none focus:border-brand-500">
+                            <option value="ALL">Tất cả mức độ</option>
+                            <option value="ĐỎ">Mức ĐỎ (Khẩn cấp)</option>
+                            <option value="CAM">Mức CAM (Nguy cơ cao)</option>
+                            <option value="VÀNG">Mức VÀNG (Cần theo dõi)</option>
+                        </select>
+                        <!-- Filter by Status -->
+                        <select id="filterStatus" onchange="renderAdminTable()" class="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 shadow-sm outline-none focus:border-brand-500">
+                            <option value="ALL">Tất cả trạng thái</option>
+                            <option value="Mới tiếp nhận">Mới tiếp nhận</option>
+                            <option value="Đang sàng lọc">Đang sàng lọc</option>
+                            <option value="Đang hỗ trợ">Đang hỗ trợ</option>
+                            <option value="Chuyển cấp">Chuyển cấp</option>
+                            <option value="Hoàn tất">Hoàn tất</option>
+                        </select>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <button onclick="loadSampleData()" class="bg-sky-50 hover:bg-sky-100 text-brand-700 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-sky-200 transition shadow-sm flex items-center space-x-1.5">
+                            <i class="fa-solid fa-plus-circle"></i>
+                            <span>Tạo mẫu Demo</span>
+                        </button>
+                        <button onclick="openConfirmClearModal()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-rose-200 transition shadow-sm flex items-center space-x-1.5">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Xóa tất cả</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="p-3.5 font-bold whitespace-nowrap">Mã PA</th>
+                                <th class="p-3.5 font-bold whitespace-nowrap">Thời gian</th>
+                                <th class="p-3.5 font-bold">Vấn đề & Nội dung chi tiết</th>
+                                <th class="p-3.5 font-bold whitespace-nowrap">Phân loại nguy cơ</th>
+                                <th class="p-3.5 font-bold">Liên hệ</th>
+                                <th class="p-3.5 font-bold whitespace-nowrap">Trạng thái xử lý</th>
+                                <th class="p-3.5 font-bold text-center">Xóa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody" class="divide-y divide-slate-100">
+                            <!-- Populated in real-time by Firestore onSnapshot -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-white border-t border-slate-200 px-6 py-4 flex justify-between items-center flex-wrap gap-2">
+                <span class="text-xs text-slate-500 flex items-center space-x-1.5">
+                    <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+                    <span>Dữ liệu được đồng bộ hóa đám mây thời gian thực giữa Điện thoại học sinh và Máy tính quản trị.</span>
+                </span>
+                <button onclick="closeAdminDashboard()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs transition">Đóng bảng quản trị</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM CLEAR MODAL (NO BROWSER CONFIRM) -->
+    <div id="confirmClearModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
+            <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="font-bold text-slate-900 text-base">Xác nhận xóa toàn bộ dữ liệu?</h4>
+            <p class="text-xs text-slate-500">Hành động này sẽ xóa tất cả phản ánh đang lưu trên đám mây. Bạn có chắc chắn muốn tiếp tục?</p>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeConfirmClearModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs">Hủy bỏ</button>
+                <button onclick="confirmClearAllReports()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Xóa toàn bộ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center space-x-2.5 z-[70] hidden border border-slate-700">
+        <i class="fa-solid fa-bell text-sky-400"></i>
+        <span id="toastMessage">Thông báo hệ thống</span>
+    </div>
+
+    <!-- FIREBASE CLOUD REAL-TIME SCRIPT -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global state
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let allCloudReports = [];
+        let isInitialLoad = true;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const COLLECTION_NAME = 'school_safety_reports';
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const msgEl = document.getElementById('toastMessage');
+            if (!toast || !msgEl) return;
+            msgEl.innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+
+        function updateSyncStatusUI(online, text) {
+            const dot = document.getElementById('syncStatusDot');
+            const label = document.getElementById('syncStatusText');
+            if (!dot || !label) return;
+            if (online) {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+                label.className = 'font-semibold text-emerald-700';
+                label.innerText = text || 'Đã kết nối đám mây trực tuyến – Nhận phản ánh tức thời từ mọi thiết bị';
+            } else {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+                label.className = 'font-semibold text-rose-600';
+                label.innerText = text || 'Kết nối gián đoạn – Đang thử kết nối lại...';
+            }
+        }
+
+        async function initCloudSystem() {
+            try {
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+                    updateSyncStatusUI(false, 'Chế độ trình diễn nội bộ');
+                    return;
+                }
+
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // RULE 3: Auth Before Queries
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        const uidEl = document.getElementById('currentUserIdDisplay');
+                        if (uidEl) uidEl.innerText = user.uid;
+                        startRealtimeListener();
+                    }
+                });
+            } catch (err) {
+                console.error("Firebase init error:", err);
+                updateSyncStatusUI(false, 'Lỗi kết nối đám mây: ' + err.message);
+            }
+        }
+
+        function startRealtimeListener() {
+            if (!currentUser || !db) return;
+
+            // RULE 1: Strict public path so mobile submissions are immediately visible to admin on PC
+            const reportsRef = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
+
+            // RULE 2: Simple collection query without orderBy/where; sort & filter in JS memory
+            onSnapshot(
+                reportsRef,
+                (snapshot) => {
+                    const prevCount = allCloudReports.length;
+                    const fetched = [];
+                    snapshot.forEach((docSnap) => {
+                        fetched.push({ docId: docSnap.id, ...docSnap.data() });
+                    });
+
+                    // Sort in JS memory by createdAt descending
+                    fetched.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                    allCloudReports = fetched;
+
+                    updateSyncStatusUI(true);
+                    renderAdminTable();
+
+                    if (isInitialLoad) {
+                        isInitialLoad = false;
+                        // Seed 2 demo reports if database is completely empty on first launch
+                        if (allCloudReports.length === 0) {
+                            seedInitialDemoReports();
+                        }
+                    } else if (fetched.length > prevCount) {
+                        showToast('🔔 Có phản ánh mới vừa được gửi từ thiết bị!');
+                    }
+                },
+                (error) => {
+                    console.error("Firestore listener error:", error);
+                    updateSyncStatusUI(false, 'Không thể đồng bộ dữ liệu thời gian thực');
+                }
+            );
+        }
+
+        async function seedInitialDemoReports() {
+            if (!currentUser || !db) return;
+            const samples = [
+                {
+                    id: 'PA-2026-001',
+                    time: '19/10/2026 09:15',
+                    createdAt: Date.now() - 3600000,
+                    type: 'Bắt nạt trên môi trường mạng',
+                    description: 'Một số tài khoản lập nhóm chat chế giễu hình ảnh cá nhân của bạn cùng lớp.',
+                    timeLocation: 'Tối 18/10/2026 trên nhóm mạng xã hội lớp',
+                    severity: 'Sợ rằng sự việc tiếp tục leo thang hoặc bị trả đũa',
+                    contact: 'Nguyễn Văn A - Lớp 10A1 (SĐT: 0931123456)',
+                    additionalInfo: 'Mong thầy cô tư vấn kín đáo giúp bạn ấy.',
+                    status: 'Mới tiếp nhận'
+                },
+                {
+                    id: 'PA-2026-002',
+                    time: '19/10/2026 10:30',
+                    createdAt: Date.now() - 1800000,
+                    type: 'Bị đe dọa / Bắt nạt trực tiếp',
+                    description: 'Có nhóm học sinh chặn đường đe dọa sau giờ tan học.',
+                    timeLocation: 'Cổng phụ khu B sau giờ học chiều',
+                    severity: 'Đang rất nguy hiểm / Cần can thiệp khẩn cấp',
+                    contact: 'Trần Thị B - Lớp 11B2 (Zalo hỗ trợ)',
+                    additionalInfo: 'Cần bảo vệ an toàn khi ra về.',
+                    status: 'Đang hỗ trợ'
+                }
+            ];
+
+            for (const item of samples) {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, item.id);
+                await setDoc(docRef, item);
+            }
+        }
+
+        // Toggle conditional contact field
+        window.toggleContactInfo = function (show) {
+            const container = document.getElementById('contactInfoContainer');
+            const inputField = document.getElementById('contactDetails');
+            if (show) {
+                container.classList.remove('hidden');
+                inputField.setAttribute('required', 'true');
+            } else {
+                container.classList.add('hidden');
+                inputField.removeAttribute('required');
+                inputField.value = '';
+            }
+        };
+
+        // Submit handler saving directly to Firestore
+        window.handleFormSubmit = async function (event) {
+            event.preventDefault();
+
+            const checkedIssues = Array.from(document.querySelectorAll('input[name="issueType"]:checked')).map(el => el.value);
+            const issueError = document.getElementById('issueError');
+
+            if (checkedIssues.length === 0) {
+                issueError.classList.remove('hidden');
+                issueError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            } else {
+                issueError.classList.add('hidden');
+            }
+
+            const severityEl = document.querySelector('input[name="severity"]:checked');
+            const wantContactEl = document.querySelector('input[name="wantContact"]:checked');
+            if (!severityEl || !wantContactEl) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const submitBtnText = document.getElementById('submitBtnText');
+            submitBtn.disabled = true;
+            submitBtnText.innerText = 'Đang đồng bộ lên hệ thống...';
+
+            try {
+                if (!currentUser && auth) {
+                    await signInAnonymously(auth);
+                    currentUser = auth.currentUser;
+                }
+
+                const now = new Date();
+                const timeStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+                // Generate unique tracking code PA-2026-XXX based on highest number + 1
+                let maxNum = allCloudReports.reduce((max, item) => {
+                    const match = String(item.id || '').match(/PA-2026-(\d+)/);
+                    const num = match ? parseInt(match[1], 10) : 0;
+                    return num > max ? num : max;
+                }, 0);
+                const newId = 'PA-2026-' + String(maxNum + 1).padStart(3, '0');
+
+                const newReport = {
+                    id: newId,
+                    time: timeStr,
+                    createdAt: Date.now(),
+                    type: checkedIssues.join(', '),
+                    description: document.getElementById('description').value.trim() || 'Không mô tả chi tiết',
+                    timeLocation: document.getElementById('timeLocation').value.trim() || 'Chưa rõ thời gian/địa điểm',
+                    severity: severityEl.value,
+                    contact: wantContactEl.value === 'Có' ? document.getElementById('contactDetails').value.trim() : 'Không yêu cầu liên hệ trực tiếp',
+                    additionalInfo: document.getElementById('additionalInfo').value.trim() || '',
+                    status: 'Mới tiếp nhận',
+                    submittedByUid: currentUser ? currentUser.uid : 'anonymous'
+                };
+
+                if (db && currentUser) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, newId);
+                    await setDoc(docRef, newReport);
+                } else {
+                    allCloudReports.unshift(newReport);
+                    renderAdminTable();
+                }
+
+                document.getElementById('generatedCode').innerText = newId;
+                document.getElementById('copyNotice').classList.add('hidden');
+                document.getElementById('successModal').classList.remove('hidden');
+
+                document.getElementById('reportForm').reset();
+                window.toggleContactInfo(false);
+            } catch (error) {
+                console.error("Error saving report:", error);
+                showToast('Có lỗi khi gửi dữ liệu. Vui lòng thử lại!');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtnText.innerText = 'Gửi Phản Ánh An Toàn';
+            }
+        };
+
+        // Copy tracking code using execCommand for iframe compatibility
+        window.copyTrackingCode = function () {
+            const codeText = document.getElementById('generatedCode').innerText;
+            const tempInput = document.createElement('input');
+            tempInput.value = codeText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            document.getElementById('copyNotice').classList.remove('hidden');
+        };
+
+        // Lookup tracking code modal functions
+        window.openLookupModal = function () {
+            document.getElementById('lookupModal').classList.remove('hidden');
+            document.getElementById('lookupResultBox').classList.add('hidden');
+        };
+
+        window.closeLookupModal = function () {
+            document.getElementById('lookupModal').classList.add('hidden');
+        };
+
+        window.handleLookupCode = function () {
+            const code = document.getElementById('lookupCodeInput').value.trim().toUpperCase();
+            const box = document.getElementById('lookupResultBox');
+            box.classList.remove('hidden');
+
+            if (!code) {
+                box.innerHTML = `<p class="text-rose-600 font-semibold">Vui lòng nhập mã phản ánh cần tra cứu.</p>`;
+                return;
+            }
+
+            const found = allCloudReports.find(r => String(r.id).toUpperCase() === code);
+            if (!found) {
+                box.innerHTML = `<p class="text-rose-600 font-semibold"><i class="fa-solid fa-circle-xmark mr-1"></i>Không tìm thấy mã phản ánh <strong>${code}</strong> trên hệ thống.</p>`;
+                return;
+            }
+
+            box.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <span class="font-mono font-extrabold text-brand-600 text-sm">${found.id}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">${found.status}</span>
+                    </div>
+                    <p class="text-slate-600"><strong>Thời điểm tiếp nhận:</strong> ${found.time}</p>
+                    <p class="text-slate-600"><strong>Nhóm vấn đề:</strong> ${found.type}</p>
+                    <p class="text-slate-600"><strong>Mức độ:</strong> ${found.severity}</p>
+                `;
+        };
+
+        window.closeSuccessModal = function () {
+            document.getElementById('successModal').classList.add('hidden');
+        };
+
+        window.openEmergencyModal = function () {
+            document.getElementById('emergencyModal').classList.remove('hidden');
+        };
+
+        window.closeEmergencyModal = function () {
+            document.getElementById('emergencyModal').classList.add('hidden');
+        };
+
+        window.openAdminLogin = function () {
+            document.getElementById('adminLoginError').classList.add('hidden');
+            document.getElementById('adminLoginModal').classList.remove('hidden');
+        };
+
+        window.closeAdminLogin = function () {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+            document.getElementById('adminPasswordInput').value = '';
+            document.getElementById('adminLoginError').classList.add('hidden');
+        };
+
+        window.verifyAdminLogin = function () {
+            const pass = document.getElementById('adminPasswordInput').value;
+            if (pass === 'admin123' || pass === '') {
+                window.closeAdminLogin();
+                window.openAdminDashboard();
+            } else {
+                document.getElementById('adminLoginError').classList.remove('hidden');
+            }
+        };
+
+        window.openAdminDashboard = function () {
+            window.renderAdminTable();
+            document.getElementById('adminDashboardModal').classList.remove('hidden');
+        };
+
+        window.closeAdminDashboard = function () {
+            document.getElementById('adminDashboardModal').classList.add('hidden');
+        };
+
+        // Update report status directly in Firestore
+        window.updateReportStatus = async function (docId, newStatus) {
+            if (!db || !currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, docId);
+                await updateDoc(docRef, { status: newStatus });
+                showToast(`Đã cập nhật trạng thái ${docId} sang "${newStatus}"`);
+            } catch (e) {
+                console.error("Update status error:", e);
+                showToast('Lỗi khi cập nhật trạng thái!');
+            }
+        };
+
+        // Delete a single report
+        window.deleteSingleReport = async function (docId) {
+            if (!db || !currentUser) return;
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, docId);
+                await deleteDoc(docRef);
+                showToast(`Đã xóa phản ánh ${docId}`);
+            } catch (e) {
+                console.error("Delete report error:", e);
+            }
+        };
+
+        function getSeverityBadge(severityStr = '') {
+            if (severityStr.includes('khẩn cấp')) {
+                return { code: 'ĐỎ', label: 'Mức ĐỎ – Khẩn cấp', classes: 'bg-rose-100 text-rose-700 border-rose-200' };
+            }
+            if (severityStr.includes('leo thang')) {
+                return { code: 'CAM', label: 'Mức CAM – Nguy cơ cao', classes: 'bg-amber-100 text-amber-800 border-amber-200' };
+            }
+            return { code: 'VÀNG', label: 'Mức VÀNG – Cần theo dõi', classes: 'bg-sky-100 text-sky-800 border-sky-200' };
+        }
+
+        window.renderAdminTable = function () {
+            const tbody = document.getElementById('adminTableBody');
+            const totalEl = document.getElementById('totalReportsCount');
+            if (!tbody || !totalEl) return;
+
+            const sevFilter = document.getElementById('filterSeverity')?.value || 'ALL';
+            const statusFilter = document.getElementById('filterStatus')?.value || 'ALL';
+
+            const filtered = allCloudReports.filter(r => {
+                const badge = getSeverityBadge(r.severity);
+                const matchSev = sevFilter === 'ALL' || badge.code === sevFilter;
+                const matchStatus = statusFilter === 'ALL' || r.status === statusFilter;
+                return matchSev && matchStatus;
+            });
+
+            totalEl.innerText = filtered.length;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Không có phản ánh nào khớp với bộ lọc hiện tại.</td></tr>`;
+                return;
+            }
+
+            const statuses = ['Mới tiếp nhận', 'Đang sàng lọc', 'Đang hỗ trợ', 'Chuyển cấp', 'Hoàn tất'];
+
+            tbody.innerHTML = filtered.map(r => {
+                const badge = getSeverityBadge(r.severity);
+                const docKey = r.docId || r.id;
+                return `
+                    <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
+                        <td class="p-3.5 font-mono font-bold text-brand-600 whitespace-nowrap">${r.id}</td>
+                        <td class="p-3.5 text-slate-600 whitespace-nowrap text-xs">${r.time}</td>
+                        <td class="p-3.5 space-y-1 max-w-xs">
+                            <div class="text-slate-900 font-bold">${r.type}</div>
+                            ${r.description ? `<p class="text-xs text-slate-600 leading-relaxed">${r.description}</p>` : ''}
+                            ${r.timeLocation ? `<p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${r.timeLocation}</p>` : ''}
+                            ${r.additionalInfo ? `<p class="text-[11px] text-sky-700 bg-sky-50 px-2 py-1 rounded-lg border border-sky-100">Góp ý: ${r.additionalInfo}</p>` : ''}
+                        </td>
+                        <td class="p-3.5 whitespace-nowrap">
+                            <span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold border ${badge.classes}">
+                                ${badge.label}
+                            </span>
+                        </td>
+                        <td class="p-3.5 text-slate-700 text-xs">${r.contact}</td>
+                        <td class="p-3.5 whitespace-nowrap">
+                            <select onchange="updateReportStatus('${docKey}', this.value)" class="text-xs font-bold rounded-xl px-2.5 py-1.5 border border-emerald-200 bg-emerald-50 text-emerald-800 outline-none focus:ring-2 focus:ring-brand-500">
+                                ${statuses.map(st => `<option value="${st}" ${r.status === st ? 'selected' : ''}>${st}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="deleteSingleReport('${docKey}')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg transition" title="Xóa phản ánh">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `}).join('');
+        };
+
+        window.loadSampleData = async function () {
+            await seedInitialDemoReports();
+            showToast('Đã nạp dữ liệu mẫu lên đám mây!');
+        };
+
+        window.openConfirmClearModal = function () {
+            document.getElementById('confirmClearModal').classList.remove('hidden');
+        };
+
+        window.closeConfirmClearModal = function () {
+            document.getElementById('confirmClearModal').classList.add('hidden');
+        };
+
+        window.confirmClearAllReports = async function () {
+            window.closeConfirmClearModal();
+            if (!db || !currentUser) return;
+            try {
+                for (const item of allCloudReports) {
+                    const key = item.docId || item.id;
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, key));
+                }
+                showToast('Đã xóa toàn bộ danh sách phản ánh trên đám mây.');
+            } catch (e) {
+                console.error("Clear error:", e);
+            }
+        };
+
+        // Start Firebase when window loads
+        window.addEventListener('DOMContentLoaded', initCloudSystem);
+    </script>
+</body>
+</html>
