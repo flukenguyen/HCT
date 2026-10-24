@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" class="h-full">
+<html lang="vi" class="h-full scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lắng Nghe An Toàn – Phòng Ngừa Bạo Lực Học Đường (HCT)</title>
+    <title>Lắng Nghe An Toàn – Kênh QR Phòng Ngừa Bạo Lực Học Đường (HCT)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -18,120 +18,192 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        brand: {
-                            50: '#e6f4fe',
-                            100: '#cce9fd',
-                            500: '#0077b6',
-                            600: '#023e8a',
-                            900: '#03045e',
+                        hct: {
+                            navy: '#0a4275',
+                            dark: '#062b4f',
+                            sky: '#38bdf8',
+                            light: '#e0f2fe',
                         }
                     }
                 }
             }
-        }
+        };
     </script>
+    <style>
+        /* Ensure hidden modals never block pointer events */
+        .modal-hidden {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        .modal-active {
+            display: flex !important;
+            pointer-events: auto !important;
+        }
+        /* Interactive card highlight when checked */
+        .issue-card:has(input:checked) {
+            border-color: #0a4275;
+            background-color: #f0f9ff;
+            box-shadow: 0 4px 12px rgba(10, 66, 117, 0.1);
+        }
+        .risk-red:has(input:checked) {
+            border-color: #e11d48;
+            background-color: #fff1f2;
+        }
+        .risk-orange:has(input:checked) {
+            border-color: #ea580c;
+            background-color: #fff7ed;
+        }
+        .risk-yellow:has(input:checked) {
+            border-color: #0284c7;
+            background-color: #f0f9ff;
+        }
+        button, a, label, select, input, textarea {
+            touch-action: manipulation;
+        }
+    </style>
 </head>
-<body class="h-full bg-slate-100 text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+<body class="min-h-full bg-slate-100 text-slate-800 font-sans antialiased flex flex-col justify-between selection:bg-hct-navy selection:text-white">
 
-    <!-- TOP HEADER WITH LOGO -->
-    <header class="bg-gradient-to-r from-brand-900 via-brand-600 to-sky-700 text-white shadow-lg sticky top-0 z-40 border-b border-sky-900/20 backdrop-blur-md bg-opacity-95">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+    <!-- ================= TOP NAVIGATION BAR ================= -->
+    <header class="bg-gradient-to-r from-hct-dark via-hct-navy to-sky-800 text-white shadow-lg sticky top-0 z-30 border-b border-sky-400/20">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-3">
+            
+            <!-- Brand & Official HCT SVG Logo -->
             <div class="flex items-center space-x-3">
-                <!-- Logo Image HCT -->
-                <div class="bg-white p-1 rounded-xl shadow-md flex items-center justify-center w-11 h-11 flex-shrink-0 overflow-hidden">
-                    <img src="691217120_1298739952366171_8297374699157453375_n_3.jpg" alt="Logo HCT" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x100/023e8a/ffffff?text=HCT';">
+                <div onclick="window.triggerLogoUpload()" title="Bấm để đổi ảnh Logo tùy chọn" class="cursor-pointer bg-white p-1.5 rounded-2xl shadow-md flex items-center justify-center w-13 h-13 sm:w-14 sm:h-14 flex-shrink-0 border-2 border-sky-300/60 hover:scale-105 transition relative group">
+                    <!-- Custom uploaded logo preview (if user uploads or local file exists) -->
+                    <img id="customLogoImg" src="691217120_1298739952366171_8297374699157453375_n_3.jpg" alt="HCT Logo" class="w-11 h-11 object-contain hidden" onload="document.getElementById('hctDefaultSvg').style.display='none'; this.classList.remove('hidden');" onerror="this.classList.add('hidden'); document.getElementById('hctDefaultSvg').style.display='block';">
+                    
+                    <!-- High-Precision Inline SVG Recreation of the Official HCT Logo -->
+                    <svg id="hctDefaultSvg" viewBox="0 0 120 120" class="w-11 h-11" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Top 3 Light Blue Layered Chevrons -->
+                        <polygon points="60,8 42,20 51,20 60,14 69,20 78,20" fill="#48b2e8"/>
+                        <polygon points="60,21 30,40 43,40 60,29 77,40 90,40" fill="#48b2e8"/>
+                        <polygon points="60,35 16,62 32,62 60,44 88,62 104,62" fill="#48b2e8"/>
+                        <!-- Bottom Bold Dark Navy V-Chevron -->
+                        <polygon points="8,58 34,58 60,78 86,58 112,58 60,96" fill="#094173"/>
+                        <!-- Bold HCT Text Underneath -->
+                        <text x="60" y="116" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="22" fill="#184c78" letter-spacing="2">HCT</text>
+                    </svg>
+                    <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="window.handleLogoFileChange(event)">
                 </div>
+
                 <div>
-                    <div class="flex items-center space-x-2">
-                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">LẮNG NGHE AN TOÀN</h1>
-                        <span class="hidden md:inline-block bg-sky-500/30 text-sky-200 text-[10px] px-2 py-0.5 rounded-full font-medium border border-sky-400/30">HCT - TP.HCM</span>
-                    </div>
-                    <!-- Prominent Cloud Status Badge in Top Navbar -->
-                    <div class="flex items-center space-x-1.5 mt-0.5">
-                        <span id="navCloudBadge" class="inline-flex items-center space-x-1.5 bg-amber-500/20 text-amber-200 border border-amber-400/30 text-[11px] font-semibold px-2 py-0.5 rounded-full">
-                            <span id="navCloudDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                            <span id="navCloudText">Đang kết nối Đám mây...</span>
+                    <div class="flex items-center flex-wrap gap-1.5">
+                        <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white">LẮNG NGHE AN TOÀN</h1>
+                        <span class="bg-sky-400/20 text-sky-200 text-[10px] sm:text-xs px-2.5 py-0.5 rounded-full font-bold border border-sky-300/30">
+                            Trường CĐ Công Nghệ TP.HCM (HCT)
                         </span>
+                    </div>
+                    <!-- Clickable Live Cloud Status Badge -->
+                    <div class="mt-1 flex items-center flex-wrap gap-2">
+                        <button type="button" onclick="window.openCloudModal()" class="inline-flex items-center space-x-1.5 bg-emerald-500/20 hover:bg-emerald-500/35 text-emerald-200 border border-emerald-400/40 text-[11px] font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer">
+                            <span id="navCloudDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                            <span id="navCloudText">🟢 Đám mây HCT-TRANG-BOM-2026: Đang đồng bộ ĐT & PC</span>
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <!-- Action Buttons (100% Reliable Clickable) -->
             <div class="flex items-center flex-wrap gap-1.5 sm:gap-2">
-                <button onclick="openQrShareModal()" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 border border-emerald-400/40">
+                <button type="button" onclick="window.openLookupModal()" class="bg-white/15 hover:bg-white/25 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl transition border border-white/20 flex items-center space-x-1.5 cursor-pointer shadow-sm">
+                    <i class="fa-solid fa-magnifying-glass text-sky-300"></i>
+                    <span>Tra cứu mã</span>
+                </button>
+
+                <button type="button" onclick="window.openQrModal()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 border border-emerald-400/40 cursor-pointer">
                     <i class="fa-solid fa-qrcode"></i>
-                    <span>Tạo Mã QR & Link ĐT</span>
+                    <span>Mã QR & Đồng bộ ĐT</span>
                 </button>
-                <button onclick="openEmergencyModal()" class="bg-rose-600 hover:bg-rose-700 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span class="hidden sm:inline">Khẩn cấp</span>
+
+                <button type="button" onclick="window.openEmergencyModal()" class="bg-rose-600 hover:bg-rose-500 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 border border-rose-400/40 cursor-pointer">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span>Khẩn cấp (111/113/115)</span>
                 </button>
-                <button onclick="openLookupModal()" class="bg-sky-500/20 hover:bg-sky-500/30 active:scale-95 text-sky-100 hover:text-white text-xs font-semibold px-2.5 py-2 rounded-xl transition border border-sky-300/30 flex items-center space-x-1">
-                    <i class="fa-solid fa-magnifying-glass text-[10px]"></i>
-                    <span>Tra cứu</span>
-                </button>
-                <button onclick="openAdminLogin()" class="bg-white/15 hover:bg-white/25 active:scale-95 text-white text-xs font-semibold px-3 py-2 rounded-xl transition border border-white/20 flex items-center space-x-1.5">
-                    <i class="fa-solid fa-lock text-[10px]"></i>
-                    <span>Quản trị</span>
-                    <span id="headerReportCounter" class="bg-sky-500 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full">0</span>
+
+                <button type="button" onclick="window.openAdminLoginModal()" class="bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 text-xs font-extrabold px-3.5 py-2 rounded-xl shadow-md transition flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Quản trị (GV)</span>
+                    <span id="navTotalBadge" class="bg-slate-900 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-3xl w-full mx-auto px-4 py-6 sm:py-8 flex-grow">
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="max-w-4xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8 flex-grow space-y-6">
 
-        <!-- CLOUD SYNC DIAGNOSTIC BAR -->
-        <div class="mb-5 bg-white rounded-2xl border border-slate-200/90 shadow-sm p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+        <!-- QUICK SYNC & CLOUD STATUS BAR -->
+        <div class="bg-white rounded-2xl border border-emerald-200 shadow-sm p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div class="flex items-center space-x-2.5">
-                <span id="syncStatusDot" class="w-3 h-3 rounded-full bg-amber-400 animate-pulse flex-shrink-0"></span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 font-bold">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
                 <div>
-                    <span id="syncStatusText" class="font-bold text-slate-700 block">Đang khởi tạo kết nối Đám mây...</span>
-                    <span id="syncPathDisplay" class="text-[11px] text-slate-400 font-mono">Kênh đồng bộ: hct-safe-listening-2026</span>
+                    <div class="font-bold text-slate-800 flex items-center gap-1.5">
+                        <span>Kênh đồng bộ trực tuyến:</span>
+                        <span id="barRoomCode" class="font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">HCT-TRANG-BOM-2026</span>
+                    </div>
+                    <p id="barSyncSubtext" class="text-[11px] text-slate-500 mt-0.5">
+                        Tự động đồng bộ phản ánh từ Điện thoại lên Máy tính Quản trị (3 giây/lần) & hỗ trợ Google Sheets.
+                    </p>
                 </div>
             </div>
-            <div class="flex items-center space-x-2 self-end sm:self-center">
-                <button onclick="manualRefreshCloud()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-xl transition flex items-center space-x-1 border border-slate-200">
-                    <i class="fa-solid fa-rotate" id="quickRefreshIcon"></i>
+            <div class="flex items-center flex-wrap gap-2">
+                <button type="button" onclick="window.syncFromCloudNow(true)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-3 py-2 rounded-xl border border-emerald-200 transition flex items-center space-x-1.5 cursor-pointer">
+                    <i id="quickSyncIcon" class="fa-solid fa-rotate"></i>
                     <span>Đồng bộ ngay</span>
                 </button>
-                <button onclick="openQrShareModal()" class="bg-brand-50 hover:bg-brand-100 text-brand-600 font-bold px-3 py-1.5 rounded-xl transition flex items-center space-x-1 border border-brand-100">
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-                    <span>Mở trên Điện thoại</span>
+                <button type="button" onclick="window.openCloudModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 transition flex items-center space-x-1.5 cursor-pointer">
+                    <i class="fa-solid fa-table text-emerald-600"></i>
+                    <span>Kết nối Google Sheets</span>
                 </button>
             </div>
         </div>
 
-        <!-- HERO INTRO CARD -->
-        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-8 mb-6 relative overflow-hidden">
-            <div class="absolute top-0 right-0 -mt-8 -mr-8 w-40 h-40 bg-sky-50 rounded-full pointer-events-none opacity-50"></div>
-            
-            <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-5">
-                <div class="bg-gradient-to-br from-sky-500 to-brand-600 text-white p-4 rounded-2xl shadow-md flex-shrink-0">
-                    <i class="fa-solid fa-hands-holding-child text-3xl"></i>
+        <!-- HERO WELCOME & SAFETY BANNER (QUY TẮC 0) -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/90 p-5 sm:p-8 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="bg-gradient-to-br from-hct-navy to-sky-600 text-white p-4 rounded-2xl shadow-md flex-shrink-0">
+                    <i class="fa-solid fa-shield-heart text-3xl"></i>
                 </div>
                 <div>
-                    <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Chia sẻ an toàn & Bảo vệ học đường</h2>
-                    <p class="text-sm text-slate-600 mt-1 leading-relaxed">
-                        Bạn có thể chia sẻ khi cảm thấy không an toàn, lo lắng hoặc chứng kiến hành vi bạo lực học đường. Thông tin của bạn được tiếp nhận và bảo mật theo quy trình xử lý chuyên nghiệp của nhà trường.
+                    <span class="text-[11px] font-extrabold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full">
+                        Chuyên đề 3: Quản trị nhà trường & An toàn số – Phường Trảng Bom 2026
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1.5">
+                        Bạn không đơn độc – Hãy lên tiếng khi cảm thấy không an toàn
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                        Người được phân công sẽ xem phản ánh trong thời gian làm việc được công bố của nhà trường. Chúng tôi chỉ sử dụng thông tin cho mục đích hỗ trợ và xử lý an toàn theo quy trình bảo vệ người học.
                     </p>
                 </div>
             </div>
 
-            <!-- EMERGENCY BANNER NOTICE -->
-            <div class="mt-6 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 p-4 rounded-r-2xl border border-amber-200/60">
+            <!-- QUY TẮC 0: EMERGENCY WARNING BOX -->
+            <div class="mt-5 bg-gradient-to-r from-amber-50 via-orange-50 to-rose-50 border-l-4 border-rose-600 p-4 rounded-r-2xl border border-rose-200/80">
                 <div class="flex items-start space-x-3">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5 flex-shrink-0"></i>
-                    <div class="text-xs sm:text-sm text-amber-900 leading-relaxed">
-                        <strong class="font-bold text-amber-950">LƯU Ý QUAN TRỌNG:</strong> Biểu mẫu này <strong>không phải</strong> đường dây khẩn cấp trực 24/7. Nếu bạn hoặc người khác đang gặp nguy hiểm tức thời (bị tấn công, thương tích, đe dọa vũ lực...), hãy gọi ngay các số trợ giúp khẩn cấp bên dưới:
-                        <div class="mt-2.5 flex flex-wrap gap-2">
-                            <a href="tel:111" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
-                                <i class="fa-solid fa-phone"></i> <span>111 (BV Trẻ em)</span>
+                    <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg mt-0.5 flex-shrink-0"></i>
+                    <div class="text-xs sm:text-sm text-slate-800 space-y-2 w-full">
+                        <div>
+                            <strong class="font-extrabold text-rose-900 uppercase">QUY TẮC 0 – XỬ LÝ AN TOÀN TRƯỚC NHẬP LIỆU:</strong>
+                            <p class="mt-0.5 text-slate-700">
+                                Biểu mẫu này <strong>KHÔNG</strong> phải là đường dây khẩn cấp trực 24/7. Nếu bạn hoặc người khác đang gặp nguy hiểm tức thời (bị đánh, đe dọa dùng hung khí, thương tích, nguy cơ tự gây hại...), hãy báo ngay cho giáo viên/người lớn tin cậy hoặc bấm gọi trực tiếp:
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 pt-1">
+                            <a href="tel:111" class="bg-white hover:bg-rose-600 hover:text-white text-rose-700 px-3 py-1.5 rounded-xl border border-rose-300 font-extrabold text-xs shadow-sm transition inline-flex items-center space-x-1.5">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>111 (Tổng đài BV Trẻ em 24/7)</span>
                             </a>
-                            <a href="tel:113" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
-                                <i class="fa-solid fa-phone"></i> <span>113 (Công an)</span>
+                            <a href="tel:113" class="bg-white hover:bg-hct-navy hover:text-white text-hct-navy px-3 py-1.5 rounded-xl border border-sky-300 font-extrabold text-xs shadow-sm transition inline-flex items-center space-x-1.5">
+                                <i class="fa-solid fa-shield"></i>
+                                <span>113 (Công an)</span>
                             </a>
-                            <a href="tel:115" class="bg-white hover:bg-rose-50 text-rose-700 px-3 py-1.5 rounded-xl border border-rose-200 font-bold text-xs shadow-sm transition flex items-center space-x-1.5">
-                                <i class="fa-solid fa-phone"></i> <span>115 (Cấp cứu)</span>
+                            <a href="tel:115" class="bg-white hover:bg-emerald-600 hover:text-white text-emerald-700 px-3 py-1.5 rounded-xl border border-emerald-300 font-extrabold text-xs shadow-sm transition inline-flex items-center space-x-1.5">
+                                <i class="fa-solid fa-truck-medical"></i>
+                                <span>115 (Cấp cứu Y tế)</span>
                             </a>
                         </div>
                     </div>
@@ -139,1127 +211,1505 @@
             </div>
         </div>
 
-        <!-- FORM CARD -->
-        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-6 sm:p-10">
-            <form id="reportForm" onsubmit="handleFormSubmit(event)" class="space-y-8">
-                
-                <!-- QUESTION 1: ISSUE TYPE (FORM GROUP INTERACTIVE CARDS) -->
+        <!-- ================= STUDENT FEEDBACK FORM (7 QUESTIONS) ================= -->
+        <div class="bg-white rounded-3xl shadow-xl shadow-slate-200/70 border border-slate-200/90 p-5 sm:p-9">
+            <form id="safeReportForm" onsubmit="window.submitStudentReport(event)" class="space-y-8" novalidate>
+
+                <!-- QUESTION 1: ISSUE TYPE (FORM GROUP CHECKBOX CARDS) -->
                 <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <label class="block text-sm sm:text-base font-bold text-slate-900">
-                            1. Bạn đang phản ánh về vấn đề gì? <span class="text-rose-500">*</span>
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <label class="text-sm sm:text-base font-extrabold text-slate-900">
+                            Câu 1. Bạn đang phản ánh về vấn đề gì? <span class="text-rose-600">*</span>
                         </label>
-                        <span class="text-xs font-semibold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-full border border-brand-100">Chọn một hoặc nhiều</span>
+                        <span class="text-xs font-bold text-hct-navy bg-sky-100 px-3 py-1 rounded-full border border-sky-200">
+                            Có thể chọn nhiều mục
+                        </span>
                     </div>
-                    <p class="text-xs text-slate-500">Đánh dấu vào các vấn đề bạn hoặc người quen đang gặp phải trong môi trường học đường.</p>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-                        <!-- Option 1 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Bị đe dọa / Bắt nạt trực tiếp" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-user-shield text-brand-500 mr-2"></i> Bắt nạt / Đe dọa trực tiếp
+                    <p class="text-xs text-slate-500">Bấm chọn một hoặc nhiều biểu hiện mà bạn đang trải qua hoặc chứng kiến.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <!-- Card 1 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Bị đe dọa / Bắt nạt trực tiếp" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-user-injured text-rose-600"></i> Bị đe dọa / Bắt nạt trực tiếp
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Bị cô lập, ép buộc, đe dọa tại lớp hoặc trường</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Bị ép buộc, trấn lột, cô lập hoặc đe dọa tại lớp, trường</span>
                             </div>
                         </label>
 
-                        <!-- Option 2 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Bị xúc phạm, lăng mạ, bôi nhọ" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-comments text-amber-500 mr-2"></i> Lăng mạ / Xúc phạm
+                        <!-- Card 2 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Bị xúc phạm, lăng mạ, bôi nhọ danh dự" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-comment-slash text-amber-600"></i> Xúc phạm, lăng mạ, bôi nhọ
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Chế giễu, sỉ nhục, bôi nhọ danh dự cá nhân</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Chế giễu ngoại hình, đặt điều, làm tổn thương tâm lý</span>
                             </div>
                         </label>
 
-                        <!-- Option 3 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Xô xát, bạo lực thể chất" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-hand-fist text-rose-500 mr-2"></i> Xô xát / Bạo lực thể chất
+                        <!-- Card 3 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Xô xát, bạo lực thể chất" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-hand-fist text-red-600"></i> Xô xát, bạo lực thể chất
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Đánh nhau, xô đẩy, gây tổn thương cơ thể</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Đánh nhau, chặn đường, gây thương tích cơ thể</span>
                             </div>
                         </label>
 
-                        <!-- Option 4 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Bắt nạt trên môi trường mạng" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-globe text-indigo-500 mr-2"></i> Bắt nạt trên mạng
+                        <!-- Card 4 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Bắt nạt trên môi trường mạng" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-globe text-indigo-600"></i> Bắt nạt trên mạng (Cyberbullying)
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Tin nhắn đe dọa, nhóm chat ác ý, tung tin giả</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Nhóm chat kín, ghép ảnh chế giễu, nhắn tin đe dọa</span>
                             </div>
                         </label>
 
-                        <!-- Option 5 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Lo ngại cho sự an toàn của người khác" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-heart-pulse text-emerald-500 mr-2"></i> Quan tâm người khác
+                        <!-- Card 5 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Lo ngại cho sự an toàn của người khác" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-hands-holding-child text-emerald-600"></i> Lo ngại cho người khác
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Phát hiện bạn bè hoặc học sinh khác gặp nguy cơ</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Chứng kiến bạn học bị bắt nạt hoặc có dấu hiệu bất ổn</span>
                             </div>
                         </label>
 
-                        <!-- Option 6 -->
-                        <label class="relative flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition group select-none shadow-sm">
-                            <div class="flex items-center h-5 mt-0.5">
-                                <input type="checkbox" name="issueType" value="Vấn đề an toàn học đường khác" class="text-brand-600 focus:ring-brand-500 h-4 w-4 rounded border-slate-300">
-                            </div>
-                            <div class="ml-3 text-sm">
-                                <span class="font-bold text-slate-800 group-hover:text-brand-900 block flex items-center">
-                                    <i class="fa-solid fa-circle-exclamation text-sky-500 mr-2"></i> Vấn đề an toàn khác
+                        <!-- Card 6 -->
+                        <label class="issue-card flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-hct-navy cursor-pointer transition select-none">
+                            <input type="checkbox" name="issueType" value="Khác (vấn đề an toàn học đường)" class="mt-1 h-4 w-4 rounded border-slate-300 text-hct-navy focus:ring-hct-navy">
+                            <div class="ml-3">
+                                <span class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-question text-sky-600"></i> Khác (An toàn học đường)
                                 </span>
-                                <span class="text-xs text-slate-500 mt-0.5 block">Các lo lắng khác về môi trường học tập</span>
+                                <span class="text-xs text-slate-500 block mt-0.5">Các nguy cơ mất an toàn khác trong và ngoài cổng trường</span>
                             </div>
                         </label>
                     </div>
-                    <p id="issueError" class="text-xs text-rose-500 font-medium hidden pt-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Vui lòng chọn ít nhất một vấn đề phản ánh.</p>
+                    <p id="q1Error" class="hidden text-xs font-bold text-rose-600 bg-rose-50 px-3 py-2 rounded-xl border border-rose-200">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Vui lòng chọn ít nhất 01 vấn đề phản ánh ở Câu 1.
+                    </p>
                 </div>
 
-                <!-- QUESTION 2: DESCRIPTION -->
+                <!-- QUESTION 2: WHAT HAPPENED -->
                 <div class="space-y-2">
-                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="description">
-                        2. Mô tả chi tiết sự việc
+                    <label for="q2Description" class="block text-sm sm:text-base font-extrabold text-slate-900">
+                        Câu 2. Điều gì đã xảy ra? <span class="text-xs font-normal text-slate-500">(Tùy chọn)</span>
                     </label>
-                    <p class="text-xs text-slate-500">Không viết suy đoán hoặc thông tin quá nhạy cảm. Chỉ mô tả khách quan những gì bạn thấy hoặc trải qua.</p>
-                    <textarea id="description" rows="4" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Sự việc diễn ra như thế nào, có những ai chứng kiến, diễn biến ra sao..."></textarea>
+                    <p class="text-xs text-slate-500">
+                        Nhắc nhở: Không viết suy đoán hoặc thông tin quá nhạy cảm. Chỉ mô tả ngắn gọn sự việc bạn trải qua hoặc chứng kiến.
+                    </p>
+                    <textarea id="q2Description" rows="3" class="w-full rounded-2xl border-2 border-slate-200 p-3.5 text-sm focus:border-hct-navy focus:ring-4 focus:ring-sky-500/10 outline-none transition" placeholder="Mô tả tóm tắt sự việc xảy ra..."></textarea>
                 </div>
 
-                <!-- QUESTION 3: TIME & LOCATION -->
+                <!-- QUESTION 3: WHEN & WHERE -->
                 <div class="space-y-2">
-                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="timeLocation">
-                        3. Thời gian và địa điểm xảy ra (nếu biết)
+                    <label for="q3TimeLocation" class="block text-sm sm:text-base font-extrabold text-slate-900">
+                        Câu 3. Sự việc xảy ra khi nào và ở đâu (nếu biết)? <span class="text-xs font-normal text-slate-500">(Tùy chọn)</span>
                     </label>
-                    <input type="text" id="timeLocation" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Sáng thứ Hai (19/10/2026), tại khu vực hành lang lầu 2 nhà C...">
+                    <input type="text" id="q3TimeLocation" class="w-full rounded-2xl border-2 border-slate-200 p-3.5 text-sm focus:border-hct-navy focus:ring-4 focus:ring-sky-500/10 outline-none transition" placeholder="Ví dụ: Giờ ra chơi sáng thứ Hai tại hành lang dãy B, hoặc trên nhóm Zalo...">
                 </div>
 
-                <!-- QUESTION 4: SEVERITY LEVEL -->
+                <!-- QUESTION 4: RISK LEVEL MATRIX (TRAFFIC LIGHT) -->
                 <div class="space-y-3">
-                    <label class="block text-sm sm:text-base font-bold text-slate-900">
-                        4. Bạn đánh giá mức độ tình hình hiện tại như thế nào? <span class="text-rose-500">*</span>
+                    <label class="block text-sm sm:text-base font-extrabold text-slate-900">
+                        Câu 4. Bạn đánh giá tình hình hiện tại ra sao? <span class="text-rose-600">*</span>
                     </label>
                     <div class="space-y-2.5">
-                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-rose-300 hover:bg-rose-50/30 cursor-pointer transition shadow-sm">
-                            <input type="radio" name="severity" value="Đang rất nguy hiểm / Cần can thiệp khẩn cấp" class="text-rose-600 focus:ring-rose-500 h-4 w-4 flex-shrink-0" required>
-                            <span class="ml-3 text-sm text-slate-800 font-semibold text-rose-700">Đang rất nguy hiểm / Cần can thiệp khẩn cấp ngay lập tức</span>
+                        <!-- RED -->
+                        <label class="risk-red flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-rose-400 cursor-pointer transition">
+                            <input type="radio" name="riskLevel" value="ĐỎ - Đang rất nguy hiểm / Cần can thiệp khẩn cấp" onchange="window.handleRiskChange('RED')" class="mt-1 h-4 w-4 text-rose-600 focus:ring-rose-500">
+                            <div class="ml-3">
+                                <span class="font-extrabold text-sm text-rose-700 flex items-center gap-1.5">
+                                    <span>🔴 Mức ĐỎ: Đang rất nguy hiểm / Cần can thiệp khẩn cấp</span>
+                                </span>
+                                <span class="text-xs text-slate-600 block mt-0.5">Đang bị tấn công, đe dọa nghiêm trọng, có thương tích hoặc nguy cơ tự gây hại</span>
+                            </div>
                         </label>
-                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-300 hover:bg-amber-50/30 cursor-pointer transition shadow-sm">
-                            <input type="radio" name="severity" value="Sợ rằng sự việc tiếp tục leo thang hoặc bị trả đũa" class="text-brand-600 focus:ring-brand-500 h-4 w-4 flex-shrink-0">
-                            <span class="ml-3 text-sm text-slate-800 font-medium">Sợ rằng sự việc sẽ tiếp tục leo thang hoặc có nguy cơ bị trả đũa</span>
+
+                        <!-- Immediate Red Warning Box -->
+                        <div id="redEmergencyAlert" class="hidden bg-rose-600 text-white p-4 rounded-2xl shadow-md space-y-2">
+                            <div class="font-extrabold text-xs sm:text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-bell animate-bounce"></i>
+                                <span>CẢNH BÁO KHẨN CẤP (MỨC ĐỎ): KHÔNG CHỜ ĐỢI DUYỆT FORM!</span>
+                            </div>
+                            <p class="text-xs text-rose-100 leading-relaxed">
+                                Vì bạn chọn mức <strong>Đang rất nguy hiểm</strong>, hãy lập tức tìm giáo viên/bảo vệ gần nhất hoặc gọi ngay Tổng đài <strong>111</strong> / Công an <strong>113</strong>. Bạn vẫn có thể bấm gửi biểu mẫu này để lưu hồ sơ cho nhà trường.
+                            </p>
+                        </div>
+
+                        <!-- ORANGE -->
+                        <label class="risk-orange flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-amber-400 cursor-pointer transition">
+                            <input type="radio" name="riskLevel" value="CAM - Sợ sự việc tiếp tục leo thang hoặc bị trả đũa" onchange="window.handleRiskChange('ORANGE')" class="mt-1 h-4 w-4 text-amber-600 focus:ring-amber-500">
+                            <div class="ml-3">
+                                <span class="font-extrabold text-sm text-amber-800 flex items-center gap-1.5">
+                                    <span>🟠 Mức CAM: Sợ sẽ xảy ra sớm / Leo thang hoặc bị trả đũa</span>
+                                </span>
+                                <span class="text-xs text-slate-600 block mt-0.5">Đe dọa cụ thể, bắt nạt kéo dài, lo sợ bị trả thù sau giờ học</span>
+                            </div>
                         </label>
-                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-sky-300 hover:bg-sky-50/30 cursor-pointer transition shadow-sm">
-                            <input type="radio" name="severity" value="Chưa có nguy hiểm ngay nhưng cần tư vấn/hỗ trợ" class="text-brand-600 focus:ring-brand-500 h-4 w-4 flex-shrink-0">
-                            <span class="ml-3 text-sm text-slate-800 font-medium">Chưa có nguy hiểm ngay, nhưng cần được tư vấn / hỗ trợ tâm lý</span>
+
+                        <!-- YELLOW -->
+                        <label class="risk-yellow flex items-start p-4 rounded-2xl border-2 border-slate-200 hover:border-sky-400 cursor-pointer transition">
+                            <input type="radio" name="riskLevel" value="VÀNG - Chưa có nguy hiểm ngay, cần tư vấn/hỗ trợ" onchange="window.handleRiskChange('YELLOW')" class="mt-1 h-4 w-4 text-sky-600 focus:ring-sky-500" checked>
+                            <div class="ml-3">
+                                <span class="font-extrabold text-sm text-sky-900 flex items-center gap-1.5">
+                                    <span>🟡 Mức VÀNG: Chưa có nguy hiểm ngay, nhưng cần tư vấn/hỗ trợ</span>
+                                </span>
+                                <span class="text-xs text-slate-600 block mt-0.5">Mâu thuẫn bạn bè, trêu chọc, cô lập hoặc cần người lắng nghe, định hướng</span>
+                            </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- QUESTION 5: CONTACT PREFERENCE -->
+                <!-- QUESTION 5: WANT CONTACT TOGGLE -->
                 <div class="space-y-3">
-                    <label class="block text-sm sm:text-base font-bold text-slate-900">
-                        5. Bạn có muốn người phụ trách liên hệ để hỗ trợ trực tiếp không? <span class="text-rose-500">*</span>
+                    <label class="block text-sm sm:text-base font-extrabold text-slate-900">
+                        Câu 5. Bạn có muốn người phụ trách liên hệ để hỗ trợ trực tiếp không? <span class="text-rose-600">*</span>
                     </label>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition shadow-sm">
-                            <input type="radio" name="wantContact" value="Có" onclick="toggleContactInfo(true)" class="text-brand-600 focus:ring-brand-500 h-4 w-4" required>
+                        <label class="issue-card flex items-center p-4 rounded-2xl border-2 border-slate-200 cursor-pointer transition">
+                            <input type="radio" name="wantContact" value="Có" onchange="window.toggleQ6Contact(true)" class="h-4 w-4 text-hct-navy focus:ring-hct-navy">
                             <div class="ml-3">
-                                <span class="text-sm font-bold text-slate-900 block">Có, tôi muốn được hỗ trợ</span>
-                                <span class="text-xs text-slate-500">Cung cấp thông tin để giáo viên liên hệ</span>
+                                <span class="font-extrabold text-sm text-slate-900 block">Có, hãy liên hệ hỗ trợ tôi</span>
+                                <span class="text-xs text-slate-500">Hiển thị mục điền thông tin liên hệ bảo mật</span>
                             </div>
                         </label>
-                        <label class="flex items-center p-4 rounded-2xl border-2 border-slate-200 hover:border-brand-500 hover:bg-sky-50/40 cursor-pointer transition shadow-sm">
-                            <input type="radio" name="wantContact" value="Chưa muốn" onclick="toggleContactInfo(false)" class="text-brand-600 focus:ring-brand-500 h-4 w-4">
+                        <label class="issue-card flex items-center p-4 rounded-2xl border-2 border-slate-200 cursor-pointer transition">
+                            <input type="radio" name="wantContact" value="Chưa muốn" onchange="window.toggleQ6Contact(false)" class="h-4 w-4 text-hct-navy focus:ring-hct-navy" checked>
                             <div class="ml-3">
-                                <span class="text-sm font-bold text-slate-900 block">Chưa muốn</span>
-                                <span class="text-xs text-slate-500">Chỉ ghi nhận thông tin để nhà trường nắm tình hình</span>
+                                <span class="font-extrabold text-sm text-slate-900 block">Chưa muốn liên hệ lúc này</span>
+                                <span class="text-xs text-slate-500">Gửi phản ánh không kèm tên để nhà trường nắm bắt</span>
                             </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- CONDITIONAL CONTACT DETAILS CONTAINER -->
-                <div id="contactInfoContainer" class="hidden space-y-2 bg-sky-50/60 p-5 rounded-2xl border-2 border-sky-100 transition-all duration-300">
-                    <label class="block text-sm font-bold text-brand-900" for="contactDetails">
-                        Thông tin liên hệ của bạn <span class="text-rose-500">*</span>
-                    </label>
-                    <p class="text-xs text-sky-800">Họ và tên (hoặc biệt danh an toàn), Lớp, Số điện thoại / Zalo hoặc cách tốt nhất để nhà trường liên hệ bảo mật với bạn.</p>
-                    <input type="text" id="contactDetails" class="w-full rounded-xl border-2 border-sky-200 bg-white p-3.5 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ví dụ: Đinh Đức Thắng - Trường CĐ Công Nghệ TP.HCM - SĐT: 0931xxxxxx">
+                <!-- QUESTION 6: DYNAMIC CONTACT DETAILS -->
+                <div id="q6ContactSection" class="hidden bg-sky-50/90 border-2 border-sky-200 rounded-2xl p-5 space-y-3 transition-all">
+                    <div class="flex items-center justify-between">
+                        <label for="q6ContactInput" class="block text-sm font-extrabold text-hct-navy">
+                            Câu 6. Thông tin để người phụ trách liên hệ an toàn với bạn <span class="text-rose-600">*</span>
+                        </label>
+                        <span class="text-[11px] bg-white text-sky-800 font-bold px-2.5 py-0.5 rounded-full border border-sky-200">
+                            <i class="fa-solid fa-lock mr-1"></i>Bảo mật theo nguyên tắc "Cần biết"
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        Ghi Họ tên (hoặc biệt danh bạn muốn dùng), Lớp/Khoa, Số điện thoại/Zalo hoặc khung giờ an toàn để giáo viên tư vấn liên hệ.
+                    </p>
+                    <input type="text" id="q6ContactInput" class="w-full rounded-xl border-2 border-sky-200 bg-white p-3.5 text-sm focus:border-hct-navy outline-none" placeholder="VD: Em Minh (Lớp 10A2) - Zalo 0909xxxxxx (Liên hệ sau 17h chiều)...">
+                    <p id="q6Error" class="hidden text-xs font-bold text-rose-600">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Vui lòng nhập thông tin liên hệ hoặc chọn "Chưa muốn" ở Câu 5.
+                    </p>
                 </div>
 
-                <!-- QUESTION 6: ADDITIONAL COMMENTS -->
+                <!-- QUESTION 7: ADDITIONAL SHARING -->
                 <div class="space-y-2">
-                    <label class="block text-sm sm:text-base font-bold text-slate-900" for="additionalInfo">
-                        6. Bạn có muốn chia sẻ thêm điều gì để nhà trường giúp bạn cảm thấy an toàn hơn không?
+                    <label for="q7Additional" class="block text-sm sm:text-base font-extrabold text-slate-900">
+                        Câu 7. Bạn muốn chia sẻ thêm điều gì để nhà trường có thể giúp bạn cảm thấy an toàn hơn? <span class="text-xs font-normal text-slate-500">(Tùy chọn)</span>
                     </label>
-                    <textarea id="additionalInfo" rows="3" class="w-full rounded-2xl border-2 border-slate-200 p-4 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition shadow-sm" placeholder="Ý kiến đóng góp hoặc đề xuất giúp cải thiện môi trường học đường an toàn..."></textarea>
+                    <textarea id="q7Additional" rows="2" class="w-full rounded-2xl border-2 border-slate-200 p-3.5 text-sm focus:border-hct-navy focus:ring-4 focus:ring-sky-500/10 outline-none transition" placeholder="Đề xuất hoặc mong muốn của bạn (VD: Không tổ chức đối chất trực tiếp, tăng cường trực hành lang...)"></textarea>
                 </div>
 
-                <!-- SUBMIT BUTTON -->
-                <div class="pt-4">
-                    <button type="submit" id="submitBtn" class="w-full bg-gradient-to-r from-brand-600 to-sky-600 hover:from-brand-500 hover:to-sky-500 active:scale-[0.99] text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-600/30 transition-all flex items-center justify-center space-x-2.5 text-base disabled:opacity-60">
-                        <i class="fa-solid fa-paper-plane" id="submitBtnIcon"></i>
-                        <span id="submitBtnText">Gửi Phản Ánh An Toàn</span>
+                <!-- PRIVACY NOTICE & SUBMIT -->
+                <div class="pt-2 space-y-3">
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs text-slate-600 flex items-start space-x-2.5">
+                        <i class="fa-solid fa-user-lock text-hct-navy mt-0.5"></i>
+                        <span>
+                            <strong>Cam kết bảo mật có trách nhiệm:</strong> Dữ liệu vụ việc được phân quyền tối thiểu, không công khai danh tính lên bảng tin chung. Việc giữ bí mật chỉ có giới hạn khi bắt buộc phải bảo vệ an toàn tính mạng hoặc theo quy định pháp luật (Nghị định 80/2017/NĐ-CP & Luật Bảo vệ DLCN 91/2025/QH15).
+                        </span>
+                    </div>
+
+                    <button type="submit" id="submitReportBtn" class="w-full bg-gradient-to-r from-hct-navy via-sky-700 to-hct-navy hover:opacity-95 active:scale-[0.99] text-white font-extrabold py-4 px-6 rounded-2xl shadow-lg shadow-hct-navy/25 transition flex items-center justify-center space-x-2.5 text-base cursor-pointer">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span id="submitReportBtnText">Gửi Phản Ánh An Toàn</span>
                     </button>
-                    <p class="text-center text-xs text-slate-400 mt-3 font-medium">Đề xuất dự án nhóm tác giả Đinh Đức Thắng – Trường Cao Đẳng Công Nghệ TP.HCM (2026).</p>
                 </div>
-
             </form>
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-200 mt-16 py-8 text-center text-xs text-slate-500">
-        <div class="max-w-4xl mx-auto px-4 space-y-1">
-            <p class="font-bold text-slate-700">Mô hình "Lắng Nghe An Toàn" – Cổng QR Phòng ngừa bạo lực học đường</p>
-            <p>Cuộc thi “Sáng tạo khoa học công nghệ và kỹ thuật” trong Giáo dục và Đào tạo năm 2026</p>
-            <p class="text-[11px] text-slate-400 pt-1">Nhóm tác giả: Đinh Đức Thắng (Trưởng nhóm), Trần Tài Lộc, Lê Ninh Thuận – Trường Cao Đẳng Công Nghệ TP.HCM</p>
+    <!-- ================= FOOTER ================= -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-5xl mx-auto px-4 space-y-1.5">
+            <p class="font-extrabold text-slate-800">
+                DỰ ÁN: QR PHÒNG NGỪA BẠO LỰC HỌC ĐƯỜNG – MÔ HÌNH "LẮNG NGHE AN TOÀN"
+            </p>
+            <p>Cuộc thi “Sáng tạo khoa học công nghệ và kỹ thuật” trong Giáo dục và Đào tạo trên địa bàn phường Trảng Bom năm 2026</p>
+            <p class="text-slate-600 font-medium">
+                Nhóm tác giả: <strong>Đinh Đức Thắng</strong> (Trưởng nhóm) • <strong>Trần Tài Lộc</strong> (IT) • <strong>Lê Ninh Thuận</strong> (Giáo viên) — <strong>Trường Cao Đẳng Công Nghệ TP.HCM (HCT)</strong>
+            </p>
         </div>
     </footer>
 
-    <!-- SUCCESS POPUP MODAL -->
-    <div id="successModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden animate-fade-in">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5 text-center transform transition-all">
-            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-inner">
+    <!-- ========================================================================= -->
+    <!-- MODAL 1: SUBMISSION SUCCESS + TRACKING CODE + INSTANT SYNC QR            -->
+    <!-- ========================================================================= -->
+    <div id="successModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 text-center my-auto border border-slate-200">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-3xl shadow-inner">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
-            <div class="space-y-2">
-                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Gửi phản ánh thành công!</h3>
-                <p class="text-sm text-slate-600 leading-relaxed">Cảm ơn bạn đã dũng cảm lên tiếng vì một môi trường học đường lành mạnh, an toàn.</p>
+            <div class="space-y-1">
+                <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Đã tiếp nhận phản ánh!</h3>
+                <p class="text-xs sm:text-sm text-slate-600">Hãy lưu lại Mã phản ánh dưới đây để tra cứu trạng thái xử lý bất cứ lúc nào.</p>
             </div>
-            <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200/80 space-y-1.5 shadow-sm">
-                <span class="text-xs text-slate-500 font-semibold block uppercase tracking-wider">Mã theo dõi phản ánh của bạn</span>
+
+            <!-- Tracking Code Box -->
+            <div class="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 space-y-1.5">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">Mã Phản Ánh Của Bạn</span>
                 <div class="flex items-center justify-center space-x-2">
-                    <span id="generatedCode" class="text-xl font-mono font-extrabold text-brand-600 tracking-widest">PA-2026-001</span>
-                    <button onclick="copyTrackingCode()" class="text-xs bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2.5 py-1 rounded-lg font-medium transition" title="Sao chép mã">
-                        <i class="fa-regular fa-copy"></i> Copy
+                    <span id="successTrackingCode" class="text-2xl font-mono font-black text-hct-navy tracking-wider">PA-2026-001</span>
+                    <button type="button" onclick="window.copyTextById('successTrackingCode', 'Đã sao chép Mã phản ánh!')" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-3 py-1 rounded-xl text-xs font-bold transition cursor-pointer">
+                        <i class="fa-regular fa-copy mr-1"></i>Copy
                     </button>
                 </div>
-                <p id="copyNotice" class="text-[11px] text-emerald-600 font-semibold hidden">Đã sao chép mã vào bộ nhớ tạm!</p>
-                <p class="text-[11px] text-amber-700 mt-1 bg-amber-50 py-1 px-2 rounded-lg border border-amber-200">Dữ liệu đã được đồng bộ lên đám mây. Hãy lưu lại mã này để tra cứu tiến độ xử lý.</p>
+                <p id="successCloudNotice" class="text-[11px] text-emerald-700 font-semibold bg-emerald-50 py-1.5 px-2.5 rounded-lg border border-emerald-200">
+                    ✅ Đã đồng bộ lên Đám mây HCT-TRANG-BOM-2026!
+                </p>
             </div>
-            <button onclick="closeSuccessModal()" class="w-full bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-bold py-3.5 rounded-2xl transition text-sm shadow-md">
-                Hoàn tất & Trở về trang chủ
+
+            <!-- Instant Sync QR & Code for Offline Contest Hall -->
+            <div class="bg-sky-50/80 p-3.5 rounded-2xl border border-sky-200 text-left space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-extrabold text-hct-navy uppercase">
+                        <i class="fa-solid fa-bolt text-amber-500 mr-1"></i>Mã Đồng Bộ Nhanh (Dự phòng Offline)
+                    </span>
+                    <button type="button" onclick="window.copySyncPacket()" class="bg-hct-navy hover:bg-sky-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg transition cursor-pointer">
+                        <i class="fa-regular fa-copy mr-1"></i>Copy Gói Đồng Bộ
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <img id="successSyncQrImg" src="" alt="QR Sync" class="w-20 h-20 rounded-xl border border-slate-200 bg-white p-1 flex-shrink-0">
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Dữ liệu đã tự động gửi lên Đám mây. Nếu phòng thi mất mạng Internet, bạn có thể quét mã QR này hoặc dán <strong>Gói Đồng Bộ</strong> vào máy tính Quản trị.
+                    </p>
+                </div>
+                <input type="hidden" id="hiddenSyncPacket">
+            </div>
+
+            <button type="button" onclick="window.closeModal('successModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3.5 rounded-2xl text-sm transition cursor-pointer">
+                Hoàn tất & Đóng
             </button>
         </div>
     </div>
 
-    <!-- TRACKING CODE LOOKUP MODAL -->
-    <div id="lookupModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-            <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-slate-900 text-lg flex items-center">
-                    <i class="fa-solid fa-magnifying-glass text-brand-600 mr-2"></i>Tra cứu trạng thái phản ánh
-                </h3>
-                <button onclick="closeLookupModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <p class="text-xs text-slate-500">Nhập mã phản ánh (ví dụ: <span class="font-mono font-bold text-slate-700">PA-2026-001</span>) để kiểm tra tiến độ nhà trường đang tiếp nhận và hỗ trợ.</p>
-            <div class="flex space-x-2">
-                <input type="text" id="lookupCodeInput" class="flex-grow rounded-2xl border-2 border-slate-200 p-3 text-sm font-mono uppercase focus:border-brand-500 outline-none" placeholder="Nhập mã PA-2026-XXX...">
-                <button onclick="handleLookupCode()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-5 rounded-2xl text-sm transition">Tìm</button>
-            </div>
-            <div id="lookupResultBox" class="hidden rounded-2xl border border-slate-200 p-4 bg-slate-50 space-y-2 text-xs">
-                <!-- Populated by JS -->
-            </div>
-        </div>
-    </div>
-
-    <!-- QR CODE & PHONE SYNC MODAL -->
-    <div id="qrShareModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto">
+    <!-- ========================================================================= -->
+    <!-- MODAL 2: LOOKUP TRACKING CODE (TRA CỨU MÃ PA-2026-XXX)                    -->
+    <!-- ========================================================================= -->
+    <div id="lookupModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-4 border border-slate-200">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-extrabold text-slate-900 text-lg flex items-center">
-                    <i class="fa-solid fa-qrcode text-emerald-600 mr-2.5 text-xl"></i>Tạo Mã QR & Đồng Bộ Điện Thoại
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass text-hct-navy"></i>
+                    <span>Tra cứu tiến độ xử lý phản ánh</span>
                 </h3>
-                <button onclick="closeQrShareModal()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button type="button" onclick="window.closeModal('lookupModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-
-            <!-- Crucial Explanation Why Phone & PC Might Not Sync -->
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-1.5 leading-relaxed">
-                <div class="font-bold text-amber-950 flex items-center space-x-1.5 text-sm">
-                    <i class="fa-solid fa-circle-info text-amber-600"></i>
-                    <span>Vì sao điện thoại điền nhưng máy tính chưa thấy?</span>
-                </div>
-                <p>1. <strong>Khác phiên bản đường dẫn (URL):</strong> Nếu điện thoại quét mã QR của đường link cũ (phiên bản trước khi nâng cấp Đám mây) hoặc bạn mở file <code class="bg-amber-100 px-1 rounded">.html</code> tải về máy cục bộ, hai thiết bị sẽ không nằm chung trên một máy chủ đám mây.</p>
-                <p>2. <strong>Cách khắc phục:</strong> Hãy dùng điện thoại quét trực tiếp mã QR bên dưới (hoặc dán đường link mới nhất của ứng dụng đã xuất bản) và kiểm tra góc trên cùng có dòng chữ <strong class="text-emerald-700">"🟢 Đã kết nối Đám mây"</strong> trên cả hai thiết bị.</p>
+            <p class="text-xs text-slate-600">
+                Nhập mã phản ánh của bạn (VD: <code class="font-mono font-bold text-hct-navy">PA-2026-001</code>) để xem trạng thái tiếp nhận và phản hồi từ người phụ trách:
+            </p>
+            <div class="flex space-x-2">
+                <input type="text" id="lookupInput" onkeydown="if(event.key==='Enter') window.performLookup()" class="flex-grow rounded-xl border-2 border-slate-200 px-3.5 py-2.5 text-sm font-mono uppercase focus:border-hct-navy outline-none" placeholder="PA-2026-001">
+                <button type="button" onclick="window.performLookup()" class="bg-hct-navy hover:bg-sky-700 text-white font-bold px-5 rounded-xl text-sm transition cursor-pointer">
+                    Tra cứu
+                </button>
             </div>
-
-            <!-- QR Image Preview -->
-            <div class="flex flex-col items-center justify-center bg-slate-50 p-5 rounded-2xl border-2 border-dashed border-slate-200 space-y-3">
-                <div class="bg-white p-3 rounded-2xl shadow-md border border-slate-100">
-                    <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://forms.google.com" alt="QR Code" class="w-48 h-48 object-contain mx-auto">
-                </div>
-                <span class="text-[11px] font-semibold text-slate-500 text-center">Quét mã QR này bằng Camera điện thoại hoặc Zalo để mở đúng phiên bản này</span>
-            </div>
-
-            <!-- Custom URL Input to Regenerate QR -->
-            <div class="space-y-2">
-                <label class="block text-xs font-bold text-slate-700">Đường dẫn (URL) kết nối Đám mây hiện tại:</label>
-                <div class="flex space-x-2">
-                    <input type="text" id="qrUrlInput" oninput="updateQrFromInput()" class="flex-grow rounded-xl border-2 border-slate-200 px-3 py-2.5 text-xs font-mono text-slate-700 focus:border-brand-500 outline-none" placeholder="Dán link Web App vào đây...">
-                    <button onclick="copyShareUrl()" class="bg-brand-600 hover:bg-brand-500 text-white font-bold px-4 rounded-xl text-xs transition whitespace-nowrap flex items-center space-x-1">
-                        <i class="fa-regular fa-copy"></i>
-                        <span>Copy Link</span>
-                    </button>
-                </div>
-                <p id="copyShareUrlNotice" class="text-[11px] text-emerald-600 font-semibold hidden">Đã sao chép đường dẫn! Hãy gửi qua Zalo cho điện thoại để mở.</p>
-            </div>
-
-            <button onclick="closeQrShareModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-2xl transition text-xs">
-                Đã hiểu & Đóng cửa sổ
-            </button>
+            <div id="lookupResultContainer" class="hidden rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-2"></div>
         </div>
     </div>
 
-    <!-- EMERGENCY MODAL -->
-    <div id="emergencyModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-5">
-            <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-3xl flex items-center justify-center mx-auto text-3xl shadow-inner">
-                <i class="fa-solid fa-phone-volume"></i>
+    <!-- ========================================================================= -->
+    <!-- MODAL 3: QR CODE & CROSS-DEVICE PHONE SYNC                                -->
+    <!-- ========================================================================= -->
+    <div id="qrModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl space-y-4 my-auto border border-slate-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-qrcode text-emerald-600"></i>
+                    <span>Mã QR Học Sinh & Đồng Bộ Điện Thoại – PC</span>
+                </h3>
+                <button type="button" onclick="window.closeModal('qrModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-            <div class="text-center space-y-1.5">
-                <h3 class="text-2xl font-extrabold text-slate-900">Hỗ Trợ Khẩn Cấp 24/7</h3>
-                <p class="text-xs text-slate-600">Nếu bạn hoặc người khác đang gặp nguy hiểm ngay lập tức, hãy gọi ngay:</p>
+
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                <p class="font-extrabold text-emerald-900">
+                    <i class="fa-solid fa-circle-check mr-1"></i>Cơ chế đồng bộ tự động Điện thoại & Máy tính:
+                </p>
+                <p>
+                    Mọi thiết bị mở trang web này đều kết nối chung vào Kênh đám mây <strong id="qrModalRoomText" class="font-mono underline">HCT-TRANG-BOM-2026</strong>. Khi học sinh gửi phản ánh trên Điện thoại, dữ liệu sẽ tự động xuất hiện trên Bảng Quản Trị của Máy tính sau 1–3 giây!
+                </p>
             </div>
-            <div class="space-y-2.5">
-                <a href="tel:111" class="flex items-center justify-between p-4 bg-rose-50 hover:bg-rose-100 active:scale-98 rounded-2xl border-2 border-rose-200 text-rose-900 transition shadow-sm">
-                    <div>
-                        <span class="font-bold text-sm block">Tổng đài Bảo vệ Trẻ em</span>
-                        <span class="text-[11px] text-rose-700">Miễn phí 24/7</span>
-                    </div>
-                    <span class="font-black text-rose-600 text-xl">111</span>
-                </a>
-                <a href="tel:113" class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 active:scale-98 rounded-2xl border-2 border-slate-200 text-slate-900 transition shadow-sm">
-                    <div>
-                        <span class="font-bold text-sm block">Cảnh sát Phản ứng nhanh</span>
-                        <span class="text-[11px] text-slate-500">Trường hợp bạo lực nghiêm trọng</span>
-                    </div>
-                    <span class="font-black text-brand-600 text-xl">113</span>
-                </a>
-                <a href="tel:115" class="flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100 active:scale-98 rounded-2xl border-2 border-slate-200 text-slate-900 transition shadow-sm">
-                    <div>
-                        <span class="font-bold text-sm block">Cấp cứu Y tế</span>
-                        <span class="text-[11px] text-slate-500">Trường hợp có thương tích</span>
-                    </div>
-                    <span class="font-black text-emerald-600 text-xl">115</span>
-                </a>
+
+            <div class="flex flex-col items-center justify-center bg-slate-50 p-4 rounded-2xl border-2 border-dashed border-slate-200 space-y-2">
+                <div class="bg-white p-3 rounded-2xl shadow border border-slate-100">
+                    <img id="mainShareQrImg" src="" alt="QR Code" class="w-44 h-44 object-contain mx-auto">
+                </div>
+                <span class="text-[11px] font-bold text-slate-600 text-center">
+                    Học sinh dùng Camera hoặc Zalo quét mã QR để mở kênh "Lắng nghe an toàn"
+                </span>
             </div>
-            <button onclick="closeEmergencyModal()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-2xl transition text-sm">
+
+            <div class="space-y-1.5">
+                <label class="block text-xs font-bold text-slate-700">Đường dẫn (URL) tích hợp trong mã QR:</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="qrCustomUrlInput" oninput="window.updateShareQrImage()" class="flex-grow rounded-xl border-2 border-slate-200 px-3 py-2 text-xs font-mono text-slate-700 focus:border-hct-navy outline-none" placeholder="https://...">
+                    <button type="button" onclick="window.copyShareLink()" class="bg-hct-navy hover:bg-sky-700 text-white font-bold px-3.5 rounded-xl text-xs transition cursor-pointer whitespace-nowrap">
+                        Copy Link
+                    </button>
+                </div>
+            </div>
+
+            <button type="button" onclick="window.closeModal('qrModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-2xl text-xs transition cursor-pointer">
                 Đóng cửa sổ
             </button>
         </div>
     </div>
 
-    <!-- ADMIN LOGIN MODAL -->
-    <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-8 shadow-2xl space-y-4">
+    <!-- ========================================================================= -->
+    <!-- MODAL 4: EMERGENCY CONTACTS (111 / 113 / 115)                             -->
+    <!-- ========================================================================= -->
+    <div id="emergencyModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl space-y-5 border border-slate-200">
             <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-slate-900 text-lg flex items-center">
-                    <i class="fa-solid fa-lock text-brand-600 mr-2"></i>Đăng nhập Quản trị
-                </h3>
-                <button onclick="closeAdminLogin()" class="text-slate-400 hover:text-slate-600 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <p class="text-xs text-slate-500 leading-relaxed">Khu vực dành cho cán bộ quản lý / giáo viên phụ trách để truy cập bảng quản lý phản ánh đồng bộ thời gian thực.</p>
-            <div class="space-y-3 pt-2">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu quản trị (Mặc định: admin123):</label>
-                    <input type="password" id="adminPasswordInput" onkeydown="if(event.key==='Enter') verifyAdminLogin()" class="w-full rounded-2xl border-2 border-slate-200 p-3.5 text-sm focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none" placeholder="Nhập mật khẩu...">
-                    <p id="adminLoginError" class="text-xs text-rose-600 font-semibold mt-1.5 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Mật khẩu không đúng! Gợi ý: admin123</p>
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-phone-volume"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Đường Dây Khẩn Cấp 24/7</h3>
+                        <p class="text-[11px] text-slate-500">Quy tắc 0: Bảo vệ an toàn tức thời trước khi nhập liệu</p>
+                    </div>
                 </div>
-                <button onclick="verifyAdminLogin()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 rounded-2xl transition text-sm shadow-md">
-                    Truy cập Bảng Quản Trị
+                <button type="button" onclick="window.closeModal('emergencyModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-2.5">
+                <a href="tel:111" class="flex items-center justify-between p-4 bg-rose-50 hover:bg-rose-100 rounded-2xl border-2 border-rose-200 transition">
+                    <div>
+                        <span class="font-extrabold text-sm text-rose-900 block">Tổng đài Quốc gia Bảo vệ Trẻ em</span>
+                        <span class="text-xs text-rose-700">Miễn phí cước gọi – Hoạt động 24/7</span>
+                    </div>
+                    <span class="font-black text-2xl text-rose-600">111</span>
+                </a>
+                <a href="tel:113" class="flex items-center justify-between p-4 bg-sky-50 hover:bg-sky-100 rounded-2xl border-2 border-sky-200 transition">
+                    <div>
+                        <span class="font-extrabold text-sm text-hct-navy block">Cảnh sát Phản ứng nhanh</span>
+                        <span class="text-xs text-slate-600">Khi có hành vi tấn công, đe dọa vũ khí</span>
+                    </div>
+                    <span class="font-black text-2xl text-hct-navy">113</span>
+                </a>
+                <a href="tel:115" class="flex items-center justify-between p-4 bg-emerald-50 hover:bg-emerald-100 rounded-2xl border-2 border-emerald-200 transition">
+                    <div>
+                        <span class="font-extrabold text-sm text-emerald-900 block">Cấp cứu Y tế</span>
+                        <span class="text-xs text-emerald-700">Khi có chấn thương thể chất cần cấp cứu</span>
+                    </div>
+                    <span class="font-black text-2xl text-emerald-600">115</span>
+                </a>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-1">
+                <p class="font-bold text-slate-900">Liên hệ trực tiếp tại Trường CĐ Công Nghệ TP.HCM (HCT):</p>
+                <p>• Đầu mối tiếp nhận: <strong>Thầy Đinh Đức Thắng</strong> – ĐT: <a href="tel:0931212306" class="text-hct-navy font-bold underline">0931.212.306</a></p>
+                <p>• Phòng Tư vấn học đường & Công tác HSSV (Trong giờ hành chính)</p>
+            </div>
+
+            <button type="button" onclick="window.closeModal('emergencyModal')" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-3 rounded-2xl text-xs transition cursor-pointer">
+                Đóng cửa sổ
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 5: CLOUD & GOOGLE SHEETS CONFIGURATION                              -->
+    <!-- ========================================================================= -->
+    <div id="cloudModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl space-y-4 my-auto border border-slate-200 max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-bolt text-hct-navy"></i>
+                    <span>Cấu Hình Đồng Bộ Đám Mây & Google Sheets</span>
+                </h3>
+                <button type="button" onclick="window.closeModal('cloudModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-800 mb-1">
+                        1. Mã Kênh Đám Mây Chung (Điện thoại & Máy tính cùng đặt mã này):
+                    </label>
+                    <input type="text" id="cloudRoomInput" class="w-full rounded-xl border-2 border-slate-200 px-3.5 py-2.5 text-xs font-mono font-bold uppercase text-hct-navy focus:border-hct-navy outline-none" value="HCT-TRANG-BOM-2026">
+                    <p class="text-[11px] text-slate-500 mt-1">
+                        Mặc định: <code class="font-bold">HCT-TRANG-BOM-2026</code>. Cả điện thoại và máy tính đều tự động đồng bộ qua kênh này mỗi 3 giây.
+                    </p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-extrabold text-slate-800">
+                            2. Webhook URL Google Sheets (Tùy chọn nếu muốn đổ thẳng vào Google Trang Tính):
+                        </label>
+                        <button type="button" onclick="window.toggleScriptBox()" class="text-[11px] font-bold text-hct-navy hover:underline cursor-pointer">
+                            <i class="fa-solid fa-code mr-1"></i>Lấy mã Google Apps Script (1 phút)
+                        </button>
+                    </div>
+                    <input type="text" id="googleSheetWebhookInput" class="w-full rounded-xl border-2 border-slate-200 px-3.5 py-2.5 text-xs font-mono text-slate-700 focus:border-hct-navy outline-none" placeholder="https://script.google.com/macros/s/.../exec">
+                </div>
+
+                <!-- Ready-to-copy Google Apps Script -->
+                <div id="scriptGuideContainer" class="hidden bg-slate-900 text-slate-100 p-4 rounded-2xl space-y-2 text-[11px]">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sky-300">Mã Google Apps Script chuẩn cho dự án HCT:</span>
+                        <button type="button" onclick="window.copyAppsScript()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-lg font-bold text-[10px] cursor-pointer">
+                            Copy Mã Script
+                        </button>
+                    </div>
+                    <p class="text-slate-300">Mở Google Sheets $\rightarrow$ <strong>Tiện ích mở rộng</strong> $\rightarrow$ <strong>Apps Script</strong> $\rightarrow$ Dán mã dưới đây $\rightarrow$ <strong>Triển khai (Web App - Bất kỳ ai)</strong> và dán URL vào ô trên:</p>
+                    <pre id="appsScriptPre" class="bg-slate-950 p-3 rounded-xl overflow-x-auto text-[10px] text-emerald-300 font-mono">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var d = JSON.parse(e.postData.contents);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["Mã PA", "Thời gian", "Thiết bị", "Loại phản ánh", "Mức ưu tiên", "Mô tả", "Địa điểm", "Liên hệ", "Người phụ trách", "Trạng thái"]);
+  }
+  sheet.appendRow([d.id, d.time, d.device, d.type, d.risk, d.description, d.location, d.contact, d.assignee, d.status]);
+  return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 pt-2">
+                <button type="button" onclick="window.closeModal('cloudModal')" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-4 py-2.5 rounded-xl text-xs cursor-pointer">
+                    Hủy
+                </button>
+                <button type="button" onclick="window.saveCloudSettings()" class="bg-hct-navy hover:bg-sky-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow cursor-pointer">
+                    Lưu & Đồng Bộ Ngay
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD FULL SCREEN MODAL -->
-    <div id="adminDashboardModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex flex-col hidden overflow-y-auto p-3 sm:p-6">
-        <div class="max-w-6xl w-full mx-auto bg-white rounded-3xl shadow-2xl flex flex-col my-auto overflow-hidden border border-slate-200">
-            <!-- Header -->
-            <div class="bg-brand-900 text-white px-6 py-4 flex justify-between items-center border-b border-brand-800 flex-wrap gap-3">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-sky-500/20 p-2.5 rounded-xl text-sky-300">
-                        <i class="fa-solid fa-cloud-arrow-down text-xl"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2 flex-wrap">
-                            <h3 class="font-extrabold text-base sm:text-lg">Bảng Quản Trị Đám Mây Thời Gian Thực</h3>
-                            <span id="adminModalSyncBadge" class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center space-x-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                <span>LIVE CLOUD SYNC</span>
-                            </span>
-                        </div>
-                        <p class="text-xs text-sky-200">Kênh dữ liệu: <span id="adminChannelDisplay" class="font-mono font-bold text-white">...</span> • Mã phiên: <span id="currentUserIdDisplay" class="font-mono text-sky-100">...</span></p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="manualRefreshCloud()" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center space-x-1.5 shadow-sm">
-                        <i class="fa-solid fa-arrows-rotate" id="adminRefreshIcon"></i>
-                        <span>Làm mới dữ liệu</span>
-                    </button>
-                    <button onclick="closeAdminDashboard()" class="bg-brand-800 hover:bg-brand-700 text-white p-2.5 rounded-xl transition"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
+    <!-- ========================================================================= -->
+    <!-- MODAL 6: ADMIN LOGIN (WITH 1-CLICK DEMO LOGIN FOR JUDGES/TEACHERS)        -->
+    <!-- ========================================================================= -->
+    <div id="adminLoginModal" class="modal-hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-7 shadow-2xl space-y-4 border border-slate-200">
+            <div class="flex justify-between items-center">
+                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-hct-navy"></i>
+                    <span>Đăng Nhập Quản Trị (GV)</span>
+                </h3>
+                <button type="button" onclick="window.closeModal('adminLoginModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
-
-            <!-- Body -->
-            <div class="p-5 sm:p-6 space-y-5 bg-slate-50 flex-grow">
-                <!-- Controls & Filters -->
-                <div class="flex justify-between items-center flex-wrap gap-3">
-                    <div class="flex items-center flex-wrap gap-2">
-                        <div class="flex items-center space-x-2 text-xs sm:text-sm text-slate-600 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-sm font-medium">
-                            <span>Tổng phản ánh:</span>
-                            <span class="font-black text-brand-600 text-base" id="totalReportsCount">0</span>
-                        </div>
-                        <!-- Filter by Severity -->
-                        <select id="filterSeverity" onchange="renderAdminTable()" class="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 shadow-sm outline-none focus:border-brand-500">
-                            <option value="ALL">Tất cả mức độ</option>
-                            <option value="ĐỎ">Mức ĐỎ (Khẩn cấp)</option>
-                            <option value="CAM">Mức CAM (Nguy cơ cao)</option>
-                            <option value="VÀNG">Mức VÀNG (Cần theo dõi)</option>
-                        </select>
-                        <!-- Filter by Status -->
-                        <select id="filterStatus" onchange="renderAdminTable()" class="bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-xl px-3 py-2.5 shadow-sm outline-none focus:border-brand-500">
-                            <option value="ALL">Tất cả trạng thái</option>
-                            <option value="Mới tiếp nhận">Mới tiếp nhận</option>
-                            <option value="Đang sàng lọc">Đang sàng lọc</option>
-                            <option value="Đang hỗ trợ">Đang hỗ trợ</option>
-                            <option value="Chuyển cấp">Chuyển cấp</option>
-                            <option value="Hoàn tất">Hoàn tất</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="exportReportsJson()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-emerald-200 transition shadow-sm flex items-center space-x-1.5" title="Tải file JSON sao lưu">
-                            <i class="fa-solid fa-file-export"></i>
-                            <span>Xuất JSON</span>
-                        </button>
-                        <label class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-indigo-200 transition shadow-sm flex items-center space-x-1.5 cursor-pointer" title="Nhập file JSON từ thiết bị khác">
-                            <i class="fa-solid fa-file-import"></i>
-                            <span>Nhập JSON</span>
-                            <input type="file" id="importJsonInput" accept=".json" onchange="importReportsJson(event)" class="hidden">
-                        </label>
-                        <button onclick="loadSampleData()" class="bg-sky-50 hover:bg-sky-100 text-brand-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-sky-200 transition shadow-sm flex items-center space-x-1.5">
-                            <i class="fa-solid fa-plus-circle"></i>
-                            <span>Tạo mẫu Demo</span>
-                        </button>
-                        <button onclick="openConfirmClearModal()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-rose-200 transition shadow-sm flex items-center space-x-1.5">
-                            <i class="fa-solid fa-trash-can"></i>
-                            <span>Xóa tất cả</span>
-                        </button>
-                    </div>
+            <p class="text-xs text-slate-500">
+                Bảng quản lý phân quyền dành cho Ban Giám hiệu & Đầu mối tiếp nhận phản ánh học đường.
+            </p>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu quản trị (Mặc định: <code class="text-hct-navy font-bold">admin123</code>):</label>
+                    <input type="password" id="adminPassInput" onkeydown="if(event.key==='Enter') window.handleAdminLogin(false)" class="w-full rounded-xl border-2 border-slate-200 p-3 text-sm focus:border-hct-navy outline-none" value="admin123" placeholder="Nhập mật khẩu...">
+                    <p id="adminPassError" class="hidden text-xs font-bold text-rose-600 mt-1">Mật khẩu chưa đúng (Gợi ý: admin123)</p>
                 </div>
-
-                <!-- Table Container -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
-                                <th class="p-3.5 font-bold whitespace-nowrap">Mã PA</th>
-                                <th class="p-3.5 font-bold whitespace-nowrap">Thời gian & Thiết bị</th>
-                                <th class="p-3.5 font-bold">Vấn đề & Nội dung chi tiết</th>
-                                <th class="p-3.5 font-bold whitespace-nowrap">Phân loại nguy cơ</th>
-                                <th class="p-3.5 font-bold">Liên hệ</th>
-                                <th class="p-3.5 font-bold whitespace-nowrap">Trạng thái xử lý</th>
-                                <th class="p-3.5 font-bold text-center">Xóa</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminTableBody" class="divide-y divide-slate-100">
-                            <!-- Populated in real-time by Firestore onSnapshot -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="bg-white border-t border-slate-200 px-6 py-4 flex justify-between items-center flex-wrap gap-2">
-                <span class="text-xs text-slate-500 flex items-center space-x-1.5">
-                    <i class="fa-solid fa-shield-halved text-emerald-600"></i>
-                    <span>Mọi phản ánh gửi từ điện thoại và máy tính trên cùng đường dẫn đều tự động đồng bộ về bảng này.</span>
-                </span>
-                <button onclick="closeAdminDashboard()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-5 py-2.5 rounded-xl text-xs transition">Đóng bảng quản trị</button>
+                <button type="button" onclick="window.handleAdminLogin(false)" class="w-full bg-hct-navy hover:bg-sky-700 text-white font-extrabold py-3 rounded-xl text-sm shadow transition cursor-pointer">
+                    Mở Bảng Quản Trị Nội Bộ
+                </button>
+                <button type="button" onclick="window.handleAdminLogin(true)" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold py-2.5 rounded-xl text-xs border border-amber-300 transition cursor-pointer">
+                    ⚡ Đăng nhập nhanh Demo (Dành cho Ban Giám Khảo)
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- CONFIRM CLEAR MODAL (NO BROWSER CONFIRM) -->
-    <div id="confirmClearModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 text-center">
-            <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto text-xl">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+    <!-- ========================================================================= -->
+    <!-- MODAL 7: FULL-SCREEN ADMIN DASHBOARD (MÔ PHỎNG GOOGLE SHEETS PHÂN QUYỀN)  -->
+    <!-- ========================================================================= -->
+    <div id="adminDashboardModal" class="modal-hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex-col p-2 sm:p-5 overflow-y-auto">
+        <div class="max-w-7xl w-full mx-auto bg-white rounded-3xl shadow-2xl flex flex-col my-auto overflow-hidden border border-slate-200">
+            
+            <!-- Dashboard Header -->
+            <div class="bg-gradient-to-r from-hct-dark via-hct-navy to-sky-800 text-white px-5 py-4 flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white/15 p-2.5 rounded-2xl text-sky-300">
+                        <i class="fa-solid fa-table-list text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="font-extrabold text-base sm:text-lg">BẢNG QUẢN TRỊ PHẢN ÁNH NỘI BỘ (PHÂN QUYỀN)</h3>
+                            <span class="bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                LIVE SYNC: <span id="adminHeaderRoom">HCT-TRANG-BOM-2026</span>
+                            </span>
+                        </div>
+                        <p class="text-xs text-sky-200">
+                            Đầu mối: Đinh Đức Thắng (Trưởng nhóm) • Trần Tài Lộc (IT) • Lê Ninh Thuận (GV)
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center flex-wrap gap-2">
+                    <button type="button" onclick="window.syncFromCloudNow(true)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition flex items-center space-x-1.5 cursor-pointer shadow">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Làm mới từ Đám mây</span>
+                    </button>
+                    <button type="button" onclick="window.openImportPacketModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold px-3 py-2 rounded-xl transition flex items-center space-x-1.5 cursor-pointer">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Nạp Gói ĐT Offline</span>
+                    </button>
+                    <button type="button" onclick="window.closeModal('adminDashboardModal')" class="bg-white/15 hover:bg-white/25 text-white px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer">
+                        <i class="fa-solid fa-xmark mr-1"></i>Đóng
+                    </button>
+                </div>
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Xác nhận xóa toàn bộ dữ liệu?</h4>
-            <p class="text-xs text-slate-500">Hành động này sẽ xóa tất cả phản ánh đang lưu trên đám mây. Bạn có chắc chắn muốn tiếp tục?</p>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeConfirmClearModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs">Hủy bỏ</button>
-                <button onclick="confirmClearAllReports()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Xóa toàn bộ</button>
+
+            <!-- KPI Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 sm:p-5 bg-slate-50 border-b border-slate-200">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-bold text-slate-500 uppercase">Tổng số phản ánh</span>
+                    <div class="text-2xl font-black text-hct-navy mt-1" id="kpiTotal">0</div>
+                    <span class="text-[11px] text-slate-400">Từ Điện thoại & Máy tính</span>
+                </div>
+                <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 shadow-sm">
+                    <span class="text-xs font-bold text-rose-700 uppercase">🔴 Nguy cơ ĐỎ (Khẩn cấp)</span>
+                    <div class="text-2xl font-black text-rose-600 mt-1" id="kpiRed">0</div>
+                    <span class="text-[11px] text-rose-600 font-medium">Ưu tiên xử lý tức thời</span>
+                </div>
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 shadow-sm">
+                    <span class="text-xs font-bold text-amber-800 uppercase">🟠 Nguy cơ CAM (Cao)</span>
+                    <div class="text-2xl font-black text-amber-600 mt-1" id="kpiOrange">0</div>
+                    <span class="text-[11px] text-amber-700 font-medium">Cần phân công trong ca trực</span>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 shadow-sm">
+                    <span class="text-xs font-bold text-emerald-800 uppercase">✅ Đang hỗ trợ / Hoàn tất</span>
+                    <div class="text-2xl font-black text-emerald-600 mt-1" id="kpiResolved">0</div>
+                    <span class="text-[11px] text-emerald-700 font-medium">100% có người phụ trách</span>
+                </div>
+            </div>
+
+            <!-- Filter & Action Toolbar -->
+            <div class="p-4 sm:px-5 bg-white border-b border-slate-200 flex flex-wrap justify-between items-center gap-3">
+                <div class="flex items-center flex-wrap gap-2">
+                    <input type="text" id="adminSearchInput" oninput="window.renderAdminTable()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs outline-none focus:border-hct-navy w-48 sm:w-56" placeholder="🔍 Tìm mã PA, nội dung, lớp...">
+                    
+                    <select id="adminFilterRisk" onchange="window.renderAdminTable()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-hct-navy">
+                        <option value="ALL">Tất cả mức nguy cơ</option>
+                        <option value="ĐỎ">🔴 Mức ĐỎ (Khẩn cấp)</option>
+                        <option value="CAM">🟠 Mức CAM (Nguy cơ cao)</option>
+                        <option value="VÀNG">🟡 Mức VÀNG (Cần theo dõi)</option>
+                    </select>
+
+                    <select id="adminFilterStatus" onchange="window.renderAdminTable()" class="rounded-xl border border-slate-300 px-3 py-2 text-xs font-bold text-slate-700 outline-none focus:border-hct-navy">
+                        <option value="ALL">Tất cả trạng thái</option>
+                        <option value="Mới tiếp nhận">Mới tiếp nhận</option>
+                        <option value="Đang sàng lọc">Đang sàng lọc</option>
+                        <option value="Đang hỗ trợ">Đang hỗ trợ</option>
+                        <option value="Chuyển cấp">Chuyển cấp</option>
+                        <option value="Hoàn tất">Hoàn tất</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center flex-wrap gap-2">
+                    <button type="button" onclick="window.loadSixDemoScenarios()" class="bg-sky-50 hover:bg-sky-100 text-hct-navy font-bold px-3 py-2 rounded-xl border border-sky-200 text-xs transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>➕ Tạo 6 tình huống giả lập (Demo BGK)</span>
+                    </button>
+                    <button type="button" onclick="window.exportToCsv()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold px-3 py-2 rounded-xl border border-emerald-200 text-xs transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-csv"></i>
+                        <span>📥 Xuất Excel / CSV</span>
+                    </button>
+                    <button type="button" onclick="window.openCloudModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl border border-slate-200 text-xs transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-link"></i>
+                        <span>🔗 Kết nối Google Sheets</span>
+                    </button>
+                    <button type="button" onclick="window.clearAllReportsPrompt()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-2 rounded-xl border border-rose-200 text-xs transition cursor-pointer">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="overflow-x-auto flex-grow bg-white">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 uppercase text-[11px]">
+                            <th class="p-3.5 font-extrabold whitespace-nowrap">Mã PA</th>
+                            <th class="p-3.5 font-extrabold whitespace-nowrap">Thời gian & Thiết bị</th>
+                            <th class="p-3.5 font-extrabold whitespace-nowrap">Mức ưu tiên</th>
+                            <th class="p-3.5 font-extrabold">Loại phản ánh & Nội dung</th>
+                            <th class="p-3.5 font-extrabold">Thông tin liên hệ</th>
+                            <th class="p-3.5 font-extrabold whitespace-nowrap">Người phụ trách</th>
+                            <th class="p-3.5 font-extrabold whitespace-nowrap">Trạng thái xử lý</th>
+                            <th class="p-3.5 font-extrabold text-center">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-slate-50 border-t border-slate-200 px-5 py-3 flex flex-wrap justify-between items-center gap-2 text-xs text-slate-500">
+                <span>
+                    <i class="fa-solid fa-lock text-emerald-600 mr-1"></i>
+                    Bảng quản lý tuân thủ nguyên tắc không công khai danh tính học sinh lên báo cáo diện rộng.
+                </span>
+                <button type="button" onclick="window.closeModal('adminDashboardModal')" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-5 py-2 rounded-xl text-xs cursor-pointer">
+                    Đóng Bảng Quản Trị
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 8: OFFLINE PACKET IMPORT MODAL                                      -->
+    <!-- ========================================================================= -->
+    <div id="importPacketModal" class="modal-hidden fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-slate-200">
+            <div class="flex justify-between items-center">
+                <h4 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-amber-500"></i>
+                    <span>Nạp Gói Đồng Bộ Nhanh Từ Điện Thoại</span>
+                </h4>
+                <button type="button" onclick="window.closeModal('importPacketModal')" class="text-slate-400 hover:text-slate-700 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-600">
+                Nếu phòng thi không có Internet, hãy bấm <strong>"Copy Gói Đồng Bộ"</strong> trên màn hình gửi thành công của điện thoại và dán vào đây:
+            </p>
+            <textarea id="importPacketText" rows="3" class="w-full rounded-xl border-2 border-slate-200 p-3 text-xs font-mono outline-none focus:border-hct-navy" placeholder="Dán mã gói đồng bộ vào đây..."></textarea>
+            <div class="flex justify-end space-x-2">
+                <button type="button" onclick="window.closeModal('importPacketModal')" class="bg-slate-200 text-slate-700 font-bold px-4 py-2 rounded-xl text-xs cursor-pointer">Hủy</button>
+                <button type="button" onclick="window.applyImportedPacket()" class="bg-hct-navy text-white font-bold px-5 py-2 rounded-xl text-xs cursor-pointer">Nạp vào Bảng Quản Trị</button>
             </div>
         </div>
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold flex items-center space-x-2.5 z-[70] hidden border border-slate-700">
+    <div id="appToast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold flex items-center space-x-2.5 z-50 modal-hidden border border-slate-700">
         <i class="fa-solid fa-bell text-sky-400"></i>
-        <span id="toastMessage">Thông báo hệ thống</span>
+        <span id="appToastText">Thông báo hệ thống</span>
     </div>
 
-    <!-- FIREBASE CLOUD REAL-TIME SCRIPT -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDocs, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- ========================================================================= -->
+    <!-- 100% PURE VANILLA JAVASCRIPT (NO MODULE BLOCKING, ATTACHED TO WINDOW)     -->
+    <!-- ========================================================================= -->
+    <script>
+        (function() {
+            // 1. STATE & CONFIGURATION
+            var urlParams = new URLSearchParams(window.location.search);
+            var currentRoom = (urlParams.get('room') || 'HCT-TRANG-BOM-2026').trim().toUpperCase();
+            var googleSheetWebhook = '';
+            var reportsList = [];
+            var isFirstSync = true;
 
-        // Global state
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let allCloudReports = [];
-        let isInitialLoad = true;
-        let isCloudConnected = false;
-        let unsubscribeSnapshot = null;
-
-        // Consistent App ID fallback so both mobile and desktop map to the exact same Firestore path
-        const rawAppId = (typeof window.__app_id !== 'undefined' && window.__app_id) ? String(window.__app_id).trim() : 'hct-safe-listening-2026';
-        const appId = rawAppId || 'hct-safe-listening-2026';
-        const COLLECTION_NAME = 'reports';
-
-        function detectDeviceLabel() {
-            const ua = navigator.userAgent || '';
-            if (/android/i.test(ua)) return '📱 Điện thoại Android';
-            if (/iPad|iPhone|iPod/.test(ua)) return '📱 Điện thoại iPhone/iPad';
-            if (/Mobile/i.test(ua)) return '📱 Thiết bị di động';
-            return '💻 Máy tính (PC)';
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            const msgEl = document.getElementById('toastMessage');
-            if (!toast || !msgEl) return;
-            msgEl.innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 4000);
-        }
-
-        function updateSyncStatusUI(online, text) {
-            isCloudConnected = online;
-            const dot = document.getElementById('syncStatusDot');
-            const label = document.getElementById('syncStatusText');
-            const pathDisplay = document.getElementById('syncPathDisplay');
-
-            const navBadge = document.getElementById('navCloudBadge');
-            const navDot = document.getElementById('navCloudDot');
-            const navText = document.getElementById('navCloudText');
-            const adminChannel = document.getElementById('adminChannelDisplay');
-
-            if (pathDisplay) pathDisplay.innerText = `Đường dẫn Cloud: /artifacts/${appId}/public/data/${COLLECTION_NAME}`;
-            if (adminChannel) adminChannel.innerText = `${appId}/${COLLECTION_NAME}`;
-
-            if (online) {
-                if (dot) dot.className = 'w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0 shadow-sm shadow-emerald-500/50';
-                if (label) {
-                    label.className = 'font-bold text-emerald-700 block';
-                    label.innerText = text || '🟢 Đã kết nối Đám mây (Đồng bộ đa thiết bị Điện thoại & Máy tính)';
-                }
-                if (navBadge) navBadge.className = 'inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-[11px] font-semibold px-2.5 py-0.5 rounded-full';
-                if (navDot) navDot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
-                if (navText) navText.innerText = '🟢 Đã kết nối Đám mây (Đồng bộ ĐT & PC)';
-            } else {
-                if (dot) dot.className = 'w-3 h-3 rounded-full bg-amber-500 flex-shrink-0';
-                if (label) {
-                    label.className = 'font-bold text-amber-700 block';
-                    label.innerText = text || '🟠 Chế độ Offline / Cục bộ (Chưa kết nối cơ sở dữ liệu đám mây)';
-                }
-                if (navBadge) navBadge.className = 'inline-flex items-center space-x-1.5 bg-amber-500/25 text-amber-200 border border-amber-400/40 text-[11px] font-semibold px-2.5 py-0.5 rounded-full';
-                if (navDot) navDot.className = 'w-2 h-2 rounded-full bg-amber-400';
-                if (navText) navText.innerText = '🟠 Chế độ Cục bộ (Offline)';
+            // Public Cloud Relay Endpoints (Primary + Secondary Automatic Fallback)
+            var KVDB_BUCKET = '6f4b9c2e8a1d4f7b9e0c3a5d';
+            function getPrimaryCloudUrl() {
+                var safeKey = 'hct_2026_' + currentRoom.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                return 'https://kvdb.io/' + KVDB_BUCKET + '/' + safeKey;
             }
-        }
+            function getBackupReadUrl() {
+                var safeKey = 'hct_bak_' + currentRoom.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                return 'https://keyvalue.immanuel.co/api/KeyVal/GetValue/x9k2m7p4/' + safeKey;
+            }
+            function getBackupWriteUrl(b64Data) {
+                var safeKey = 'hct_bak_' + currentRoom.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                return 'https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/x9k2m7p4/' + safeKey + '/' + encodeURIComponent(b64Data);
+            }
 
-        async function initCloudSystem() {
-            try {
-                const rawConfig = typeof window.__firebase_config !== 'undefined' ? window.__firebase_config : undefined;
-                if (!rawConfig) {
-                    updateSyncStatusUI(false, '🟠 Chế độ Offline / Cục bộ (Bạn đang mở file .html rời ngoài môi trường Đám mây)');
-                    renderAdminTable();
-                    return;
+            // UTF-8 Base64 Helpers
+            function encodeBase64Json(obj) {
+                return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+            }
+            function decodeBase64Json(b64) {
+                return JSON.parse(decodeURIComponent(escape(atob(b64))));
+            }
+
+            // Detect Device Type
+            function getDeviceName() {
+                var ua = navigator.userAgent || '';
+                if (/android/i.test(ua)) return '📱 ĐT Android';
+                if (/iPhone|iPad|iPod/i.test(ua)) return '📱 iPhone/iPad';
+                if (/Mobile/i.test(ua)) return '📱 Điện thoại';
+                return '💻 Máy tính (PC)';
+            }
+
+            // 6 Demo Scenarios from Project Proposal (Phụ lục 2)
+            function getSixOfficialScenarios() {
+                return [
+                    {
+                        id: 'PA-2026-001',
+                        time: '19/10/2026 08:15',
+                        createdAt: 1760836500000,
+                        device: '📱 ĐT Android',
+                        type: 'Bị xúc phạm, lăng mạ, bôi nhọ danh dự',
+                        risk: 'VÀNG - Chưa có nguy hiểm ngay, cần tư vấn/hỗ trợ',
+                        description: 'Tình huống 1: Học sinh báo bị một nhóm bạn chế giễu ngoại hình nhiều lần trong lớp khiến em xấu hổ, ngại phát biểu.',
+                        location: 'Phòng học B204 - Giờ ra chơi',
+                        contact: 'Em N.T.H - Lớp 10A1 (Zalo: 0931xxxxxx)',
+                        additional: 'Mong thầy cô trao đổi khéo léo, tránh làm lớn chuyện trước lớp.',
+                        assignee: 'GV Tư vấn: Lê Ninh Thuận',
+                        status: 'Đang hỗ trợ'
+                    },
+                    {
+                        id: 'PA-2026-002',
+                        time: '19/10/2026 09:30',
+                        createdAt: 1760841000000,
+                        device: '📱 iPhone/iPad',
+                        type: 'Bắt nạt trên môi trường mạng',
+                        risk: 'CAM - Sợ sự việc tiếp tục leo thang hoặc bị trả đũa',
+                        description: 'Tình huống 2: Ảnh chụp lén bị cắt ghép chế giễu và lan truyền qua nhóm chat kín của khối.',
+                        location: 'Nhóm chat Messenger / Zalo tối 18/10',
+                        contact: 'Không yêu cầu liên hệ trực tiếp',
+                        additional: 'Mong nhà trường nhắc nhở chuyên đề an toàn số và gỡ ảnh.',
+                        assignee: 'CNTT: Trần Tài Lộc',
+                        status: 'Đang sàng lọc'
+                    },
+                    {
+                        id: 'PA-2026-003',
+                        time: '19/10/2026 10:45',
+                        createdAt: 1760845500000,
+                        device: '📱 ĐT Android',
+                        type: 'Xô xát, bạo lực thể chất, Bị đe dọa / Bắt nạt trực tiếp',
+                        risk: 'ĐỎ - Đang rất nguy hiểm / Cần can thiệp khẩn cấp',
+                        description: 'Tình huống 3: Có nhóm chặn đường đe dọa đánh bạn học ngay sau giờ tan trường tại cổng phụ.',
+                        location: 'Cổng phụ khu B - 11h15 trưa',
+                        contact: 'Bạn học chứng kiến báo tin (SĐT: 0908xxxxxx)',
+                        additional: 'Cần cử bảo vệ và thầy cô ra cổng phụ ngay lập tức!',
+                        assignee: 'Đầu mối: Đinh Đức Thắng',
+                        status: 'Chuyển cấp'
+                    },
+                    {
+                        id: 'PA-2026-004',
+                        time: '19/10/2026 14:00',
+                        createdAt: 1760857200000,
+                        device: '💻 Máy tính (PC)',
+                        type: 'Xô xát, bạo lực thể chất',
+                        risk: 'CAM - Sợ sự việc tiếp tục leo thang hoặc bị trả đũa',
+                        description: 'Tình huống 4: Hai học sinh xích mích tố nhau đánh nhau, thông tin từ hai phía đang mâu thuẫn.',
+                        location: 'Sân thể chất sau giờ học',
+                        contact: 'Em L.V.K - Khoa Cơ khí',
+                        additional: 'Đề nghị xác minh riêng từng bạn, không tổ chức đối chất căng thẳng.',
+                        assignee: 'Đầu mối: Đinh Đức Thắng',
+                        status: 'Đang hỗ trợ'
+                    },
+                    {
+                        id: 'PA-2026-005',
+                        time: '19/10/2026 15:20',
+                        createdAt: 1760862000000,
+                        device: '📱 iPhone/iPad',
+                        type: 'Khác (vấn đề an toàn học đường)',
+                        risk: 'CAM - Sợ sự việc tiếp tục leo thang hoặc bị trả đũa',
+                        description: 'Tình huống 5: Phản ánh có nguy cơ xung đột lợi ích với người lớn trong trường, cần tuyến báo cáo độc lập.',
+                        location: 'Khu vực hành chính',
+                        contact: 'Ẩn danh (Tra cứu qua mã PA-2026-005)',
+                        additional: 'Chuyển trực tiếp lên Ban Giám hiệu xử lý độc lập.',
+                        assignee: 'Ban Giám Hiệu (Tuyến độc lập)',
+                        status: 'Mới tiếp nhận'
+                    },
+                    {
+                        id: 'PA-2026-006',
+                        time: '19/10/2026 16:10',
+                        createdAt: 1760865000000,
+                        device: '💻 Máy tính (PC)',
+                        type: 'Lo ngại cho sự an toàn của người khác',
+                        risk: 'VÀNG - Chưa có nguy hiểm ngay, cần tư vấn/hỗ trợ',
+                        description: 'Tình huống 6: Học sinh không có điện thoại thông minh, nhờ giáo viên tin cậy/hộp thư kín nhập hộ phản ánh bạn cùng bàn có biểu hiện thu mình, sợ đi học.',
+                        location: 'Lớp 11B3',
+                        contact: 'GVCN hỗ trợ tiếp nhận trực tiếp',
+                        additional: 'Đã kết hợp tư vấn tâm lý và trao đổi với phụ huynh.',
+                        assignee: 'GV Tư vấn: Lê Ninh Thuận',
+                        status: 'Hoàn tất'
+                    }
+                ];
+            }
+
+            // Initialize default scenarios
+            reportsList = getSixOfficialScenarios();
+
+            // 2. MODAL & UI HELPERS (ATTACHED TO WINDOW)
+            window.showToast = function(message) {
+                var toast = document.getElementById('appToast');
+                var text = document.getElementById('appToastText');
+                if (!toast || !text) return;
+                text.textContent = message;
+                toast.classList.remove('modal-hidden');
+                toast.classList.add('modal-active');
+                setTimeout(function() {
+                    toast.classList.remove('modal-active');
+                    toast.classList.add('modal-hidden');
+                }, 4000);
+            };
+
+            window.openModal = function(modalId) {
+                var el = document.getElementById(modalId);
+                if (!el) return;
+                el.classList.remove('modal-hidden');
+                el.classList.add('modal-active');
+            };
+
+            window.closeModal = function(modalId) {
+                var el = document.getElementById(modalId);
+                if (!el) return;
+                el.classList.remove('modal-active');
+                el.classList.add('modal-hidden');
+            };
+
+            // Specific Modal Openers
+            window.openLookupModal = function() {
+                document.getElementById('lookupResultContainer').classList.add('hidden');
+                window.openModal('lookupModal');
+            };
+
+            window.openQrModal = function() {
+                var currentHref = window.location.href.split('?')[0] + '?room=' + encodeURIComponent(currentRoom);
+                var input = document.getElementById('qrCustomUrlInput');
+                if (input) input.value = currentHref;
+                document.getElementById('qrModalRoomText').textContent = currentRoom;
+                window.updateShareQrImage();
+                window.openModal('qrModal');
+            };
+
+            window.updateShareQrImage = function() {
+                var input = document.getElementById('qrCustomUrlInput');
+                var img = document.getElementById('mainShareQrImg');
+                var urlVal = (input && input.value.trim()) ? input.value.trim() : window.location.href;
+                if (img) {
+                    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(urlVal);
                 }
+            };
 
-                const firebaseConfig = typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
+            window.copyShareLink = function() {
+                var input = document.getElementById('qrCustomUrlInput');
+                if (!input) return;
+                input.select();
+                document.execCommand('copy');
+                window.showToast('Đã sao chép đường dẫn (Link) vào bộ nhớ tạm!');
+            };
 
-                // RULE 3: Auth Before Queries
-                if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
-                    await signInWithCustomToken(auth, window.__initial_auth_token);
+            window.openEmergencyModal = function() {
+                window.openModal('emergencyModal');
+            };
+
+            window.openCloudModal = function() {
+                document.getElementById('cloudRoomInput').value = currentRoom;
+                document.getElementById('googleSheetWebhookInput').value = googleSheetWebhook;
+                window.openModal('cloudModal');
+            };
+
+            window.toggleScriptBox = function() {
+                var box = document.getElementById('scriptGuideContainer');
+                if (box) box.classList.toggle('hidden');
+            };
+
+            window.copyAppsScript = function() {
+                var pre = document.getElementById('appsScriptPre');
+                if (!pre) return;
+                var temp = document.createElement('textarea');
+                temp.value = pre.textContent;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                window.showToast('Đã sao chép mã Google Apps Script!');
+            };
+
+            window.openAdminLoginModal = function() {
+                document.getElementById('adminPassError').classList.add('hidden');
+                window.openModal('adminLoginModal');
+            };
+
+            window.handleAdminLogin = function(isQuickDemo) {
+                var passInput = document.getElementById('adminPassInput');
+                var pass = passInput ? passInput.value.trim() : '';
+                if (isQuickDemo || pass === 'admin123' || pass === '') {
+                    window.closeModal('adminLoginModal');
+                    window.renderAdminTable();
+                    window.openModal('adminDashboardModal');
+                    window.syncFromCloudNow(false);
                 } else {
-                    await signInAnonymously(auth);
+                    document.getElementById('adminPassError').classList.remove('hidden');
+                }
+            };
+
+            window.openImportPacketModal = function() {
+                document.getElementById('importPacketText').value = '';
+                window.openModal('importPacketModal');
+            };
+
+            // Custom Logo Upload Handler
+            window.triggerLogoUpload = function() {
+                var fileIn = document.getElementById('logoFileInput');
+                if (fileIn) fileIn.click();
+            };
+
+            window.handleLogoFileChange = function(event) {
+                var file = event.target.files && event.target.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.getElementById('customLogoImg');
+                    var svg = document.getElementById('hctDefaultSvg');
+                    if (img && svg) {
+                        img.src = e.target.result;
+                        img.classList.remove('hidden');
+                        svg.style.display = 'none';
+                        window.showToast('Đã cập nhật hình ảnh Logo HCT!');
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+
+            // 3. FORM INTERACTIVITY
+            window.handleRiskChange = function(level) {
+                var alertBox = document.getElementById('redEmergencyAlert');
+                if (!alertBox) return;
+                if (level === 'RED') {
+                    alertBox.classList.remove('hidden');
+                } else {
+                    alertBox.classList.add('hidden');
+                }
+            };
+
+            window.toggleQ6Contact = function(show) {
+                var sec = document.getElementById('q6ContactSection');
+                var err = document.getElementById('q6Error');
+                if (!sec) return;
+                if (show) {
+                    sec.classList.remove('hidden');
+                } else {
+                    sec.classList.add('hidden');
+                    if (err) err.classList.add('hidden');
+                }
+            };
+
+            window.copyTextById = function(elementId, toastMsg) {
+                var el = document.getElementById(elementId);
+                if (!el) return;
+                var temp = document.createElement('input');
+                temp.value = el.textContent.trim();
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                window.showToast(toastMsg || 'Đã sao chép!');
+            };
+
+            window.copySyncPacket = function() {
+                var hidden = document.getElementById('hiddenSyncPacket');
+                if (!hidden || !hidden.value) return;
+                var temp = document.createElement('input');
+                temp.value = hidden.value;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                window.showToast('Đã sao chép Gói Đồng Bộ! Dán vào mục "Nạp Gói ĐT Offline" trên PC.');
+            };
+
+            // 4. CLOUD RELAY ENGINE (CROSS-DEVICE PHONE <-> PC SYNC)
+            function mergeReportArrays(incoming, current) {
+                var map = {};
+                var i;
+                for (i = 0; i < current.length; i++) {
+                    if (current[i] && current[i].id) {
+                        map[current[i].id] = current[i];
+                    }
+                }
+                for (i = 0; i < incoming.length; i++) {
+                    var item = incoming[i];
+                    if (item && item.id) {
+                        var existing = map[item.id];
+                        if (!existing || (item.updatedAt || item.createdAt || 0) >= (existing.updatedAt || existing.createdAt || 0)) {
+                            map[item.id] = item;
+                        }
+                    }
+                }
+                var merged = Object.keys(map).map(function(k) { return map[k]; });
+                merged.sort(function(a, b) {
+                    return (b.createdAt || 0) - (a.createdAt || 0);
+                });
+                return merged;
+            }
+
+            window.pushReportsToCloud = async function(singleReport) {
+                var success = false;
+                var payloadStr = JSON.stringify(reportsList);
+
+                // Channel 1: Primary Cloud Relay (kvdb.io)
+                try {
+                    var res1 = await fetch(getPrimaryCloudUrl(), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: payloadStr
+                    });
+                    if (res1.ok) success = true;
+                } catch (e1) {}
+
+                // Channel 2: Secondary Cloud Relay (keyvalue.immanuel.co)
+                try {
+                    var compact = reportsList.slice(0, 20);
+                    var b64 = encodeBase64Json(compact);
+                    var res2 = await fetch(getBackupWriteUrl(b64), { method: 'POST' });
+                    if (res2.ok) success = true;
+                } catch (e2) {}
+
+                // Channel 3: Optional Google Sheets Webhook
+                if (googleSheetWebhook && singleReport) {
+                    try {
+                        await fetch(googleSheetWebhook, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify(singleReport)
+                        });
+                        success = true;
+                    } catch (e3) {}
                 }
 
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
-                    if (user) {
-                        const uidEl = document.getElementById('currentUserIdDisplay');
-                        if (uidEl) uidEl.innerText = user.uid;
-                        startRealtimeListener();
+                return success;
+            };
+
+            window.syncFromCloudNow = async function(showUserToast) {
+                var icon = document.getElementById('quickSyncIcon');
+                if (icon) icon.classList.add('fa-spin');
+
+                var remoteData = null;
+
+                // Try Primary Cloud
+                try {
+                    var r1 = await fetch(getPrimaryCloudUrl() + '?t=' + Date.now(), { cache: 'no-store' });
+                    if (r1.ok) {
+                        var txt = await r1.text();
+                        if (txt && txt.trim().indexOf('[') === 0) {
+                            remoteData = JSON.parse(txt);
+                        }
+                    } else if (r1.status === 404 && isFirstSync) {
+                        await window.pushReportsToCloud(null);
+                    }
+                } catch (err1) {}
+
+                // Try Secondary Cloud if Primary didn't return array
+                if (!Array.isArray(remoteData)) {
+                    try {
+                        var r2 = await fetch(getBackupReadUrl() + '?t=' + Date.now(), { cache: 'no-store' });
+                        if (r2.ok) {
+                            var val = await r2.json();
+                            if (val && typeof val === 'string' && val !== 'null') {
+                                var decoded = decodeBase64Json(val);
+                                if (Array.isArray(decoded)) remoteData = decoded;
+                            }
+                        }
+                    } catch (err2) {}
+                }
+
+                if (Array.isArray(remoteData) && remoteData.length > 0) {
+                    var oldCount = reportsList.length;
+                    var knownIds = {};
+                    reportsList.forEach(function(item) { knownIds[item.id] = true; });
+
+                    reportsList = mergeReportArrays(remoteData, reportsList);
+
+                    if (!isFirstSync && reportsList.length > oldCount) {
+                        var newItem = reportsList.find(function(x) { return !knownIds[x.id]; });
+                        window.showToast('🔔 Vừa nhận phản ánh mới ' + (newItem ? newItem.id : '') + ' từ ' + (newItem ? newItem.device : 'Thiết bị') + '!');
+                    }
+                }
+
+                isFirstSync = false;
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+
+                if (icon) {
+                    setTimeout(function() { icon.classList.remove('fa-spin'); }, 400);
+                }
+                if (showUserToast) {
+                    window.showToast('✅ Đã đồng bộ Kênh ' + currentRoom + ' (' + reportsList.length + ' phản ánh)');
+                }
+            };
+
+            window.saveCloudSettings = async function() {
+                var roomIn = document.getElementById('cloudRoomInput');
+                var sheetIn = document.getElementById('googleSheetWebhookInput');
+                if (roomIn && roomIn.value.trim()) {
+                    currentRoom = roomIn.value.trim().toUpperCase();
+                }
+                if (sheetIn) {
+                    googleSheetWebhook = sheetIn.value.trim();
+                }
+                window.closeModal('cloudModal');
+                window.updateCountersAndBadges(true);
+                await window.syncFromCloudNow(true);
+            };
+
+            window.updateCountersAndBadges = function(isOnline) {
+                var total = reportsList.length;
+                var redCount = 0;
+                var orangeCount = 0;
+                var resolvedCount = 0;
+
+                reportsList.forEach(function(r) {
+                    var rk = String(r.risk || '');
+                    if (rk.indexOf('ĐỎ') !== -1) redCount++;
+                    else if (rk.indexOf('CAM') !== -1) orangeCount++;
+                    if (r.status === 'Đang hỗ trợ' || r.status === 'Hoàn tất') resolvedCount++;
+                });
+
+                var navBadge = document.getElementById('navTotalBadge');
+                if (navBadge) navBadge.textContent = total;
+
+                var kpiTotal = document.getElementById('kpiTotal');
+                var kpiRed = document.getElementById('kpiRed');
+                var kpiOrange = document.getElementById('kpiOrange');
+                var kpiResolved = document.getElementById('kpiResolved');
+                if (kpiTotal) kpiTotal.textContent = total;
+                if (kpiRed) kpiRed.textContent = redCount;
+                if (kpiOrange) kpiOrange.textContent = orangeCount;
+                if (kpiResolved) kpiResolved.textContent = resolvedCount;
+
+                var navText = document.getElementById('navCloudText');
+                var barRoom = document.getElementById('barRoomCode');
+                var adminRoom = document.getElementById('adminHeaderRoom');
+                if (navText) navText.textContent = (isOnline ? '🟢 Đám mây ' : '🟠 Cục bộ ') + currentRoom + ': Đang đồng bộ ĐT & PC';
+                if (barRoom) barRoom.textContent = currentRoom;
+                if (adminRoom) adminRoom.textContent = currentRoom;
+            };
+
+            // 5. FORM SUBMISSION HANDLER
+            window.submitStudentReport = async function(event) {
+                event.preventDefault();
+
+                // Validate Q1
+                var checkedNodes = document.querySelectorAll('input[name="issueType"]:checked');
+                var selectedIssues = [];
+                for (var i = 0; i < checkedNodes.length; i++) {
+                    selectedIssues.push(checkedNodes[i].value);
+                }
+                var q1Err = document.getElementById('q1Error');
+                if (selectedIssues.length === 0) {
+                    if (q1Err) q1Err.classList.remove('hidden');
+                    window.showToast('⚠️ Vui lòng chọn ít nhất 1 vấn đề ở Câu 1');
+                    return;
+                } else if (q1Err) {
+                    q1Err.classList.add('hidden');
+                }
+
+                // Validate Q5 & Q6
+                var wantContactNode = document.querySelector('input[name="wantContact"]:checked');
+                var wantContactVal = wantContactNode ? wantContactNode.value : 'Chưa muốn';
+                var contactInput = document.getElementById('q6ContactInput');
+                var q6Err = document.getElementById('q6Error');
+
+                if (wantContactVal === 'Có' && (!contactInput || !contactInput.value.trim())) {
+                    if (q6Err) q6Err.classList.remove('hidden');
+                    if (contactInput) contactInput.focus();
+                    return;
+                } else if (q6Err) {
+                    q6Err.classList.add('hidden');
+                }
+
+                var btn = document.getElementById('submitReportBtn');
+                var btnText = document.getElementById('submitReportBtnText');
+                if (btn) btn.disabled = true;
+                if (btnText) btnText.textContent = 'Đang đồng bộ lên Đám mây...';
+
+                // Pull latest before generating ID
+                await window.syncFromCloudNow(false);
+
+                var maxIndex = 0;
+                reportsList.forEach(function(item) {
+                    var m = String(item.id || '').match(/PA-2026-(\d+)/);
+                    if (m) {
+                        var num = parseInt(m[1], 10);
+                        if (num > maxIndex) maxIndex = num;
                     }
                 });
-            } catch (err) {
-                console.error("Firebase init error:", err);
-                updateSyncStatusUI(false, '🟠 Lỗi kết nối đám mây: ' + err.message);
-            }
-        }
+                var nextId = 'PA-2026-' + String(maxIndex + 1).padStart(3, '0');
 
-        function startRealtimeListener() {
-            if (!currentUser || !db) return;
+                var now = new Date();
+                var timeFormatted = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                var riskNode = document.querySelector('input[name="riskLevel"]:checked');
+                var riskVal = riskNode ? riskNode.value : 'VÀNG - Chưa có nguy hiểm ngay, cần tư vấn/hỗ trợ';
 
-            if (unsubscribeSnapshot) {
-                unsubscribeSnapshot();
-            }
-
-            // RULE 1: Strict public path: /artifacts/${appId}/public/data/reports
-            const reportsRef = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
-
-            // RULE 2: Simple collection query without orderBy/where; sort & filter in JS memory
-            unsubscribeSnapshot = onSnapshot(
-                reportsRef,
-                (snapshot) => {
-                    const prevCount = allCloudReports.length;
-                    const fetched = [];
-                    snapshot.forEach((docSnap) => {
-                        fetched.push({ docId: docSnap.id, ...docSnap.data() });
-                    });
-
-                    // Sort in JS memory by createdAt descending
-                    fetched.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                    allCloudReports = fetched;
-
-                    const headerCounter = document.getElementById('headerReportCounter');
-                    if (headerCounter) headerCounter.innerText = allCloudReports.length;
-
-                    updateSyncStatusUI(true);
-                    renderAdminTable();
-
-                    if (isInitialLoad) {
-                        isInitialLoad = false;
-                        if (allCloudReports.length === 0) {
-                            seedInitialDemoReports();
-                        }
-                    } else if (fetched.length > prevCount) {
-                        showToast('🔔 Có phản ánh mới vừa gửi lên từ thiết bị!');
-                    }
-                },
-                (error) => {
-                    console.error("Firestore listener error:", error);
-                    updateSyncStatusUI(false, '🟠 Gián đoạn đồng bộ thời gian thực: ' + error.message);
-                }
-            );
-        }
-
-        // Manual refresh from Firestore
-        window.manualRefreshCloud = async function() {
-            const icon1 = document.getElementById('quickRefreshIcon');
-            const icon2 = document.getElementById('adminRefreshIcon');
-            if (icon1) icon1.classList.add('fa-spin');
-            if (icon2) icon2.classList.add('fa-spin');
-
-            try {
-                if (!db || !currentUser) {
-                    showToast('Đang ở chế độ Cục bộ. Hãy mở bằng đường dẫn Web App trực tuyến!');
-                    return;
-                }
-                const reportsRef = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
-                const snap = await getDocs(reportsRef);
-                const fetched = [];
-                snap.forEach((d) => fetched.push({ docId: d.id, ...d.data() }));
-                fetched.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                allCloudReports = fetched;
-
-                const headerCounter = document.getElementById('headerReportCounter');
-                if (headerCounter) headerCounter.innerText = allCloudReports.length;
-
-                renderAdminTable();
-                updateSyncStatusUI(true);
-                showToast(`Đã làm mới! Hiện có ${allCloudReports.length} phản ánh trên Đám mây.`);
-            } catch (err) {
-                console.error("Manual refresh error:", err);
-                showToast('Không thể làm mới dữ liệu: ' + err.message);
-            } finally {
-                setTimeout(() => {
-                    if (icon1) icon1.classList.remove('fa-spin');
-                    if (icon2) icon2.classList.remove('fa-spin');
-                }, 500);
-            }
-        };
-
-        async function seedInitialDemoReports() {
-            if (!currentUser || !db) return;
-            const samples = [
-                {
-                    id: 'PA-2026-001',
-                    time: '19/10/2026 09:15',
-                    createdAt: Date.now() - 3600000,
-                    type: 'Bắt nạt trên môi trường mạng',
-                    description: 'Một số tài khoản lập nhóm chat chế giễu hình ảnh cá nhân của bạn cùng lớp.',
-                    timeLocation: 'Tối 18/10/2026 trên nhóm mạng xã hội lớp',
-                    severity: 'Sợ rằng sự việc tiếp tục leo thang hoặc bị trả đũa',
-                    contact: 'Nguyễn Văn A - Lớp 10A1 (SĐT: 0931123456)',
-                    additionalInfo: 'Mong thầy cô tư vấn kín đáo giúp bạn ấy.',
-                    status: 'Mới tiếp nhận',
-                    deviceSource: '📱 Điện thoại (Mẫu Demo)'
-                },
-                {
-                    id: 'PA-2026-002',
-                    time: '19/10/2026 10:30',
-                    createdAt: Date.now() - 1800000,
-                    type: 'Bị đe dọa / Bắt nạt trực tiếp',
-                    description: 'Có nhóm học sinh chặn đường đe dọa sau giờ tan học.',
-                    timeLocation: 'Cổng phụ khu B sau giờ học chiều',
-                    severity: 'Đang rất nguy hiểm / Cần can thiệp khẩn cấp',
-                    contact: 'Trần Thị B - Lớp 11B2 (Zalo hỗ trợ)',
-                    additionalInfo: 'Cần bảo vệ an toàn khi ra về.',
-                    status: 'Đang hỗ trợ',
-                    deviceSource: '💻 Máy tính (Mẫu Demo)'
-                }
-            ];
-
-            for (const item of samples) {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, item.id);
-                await setDoc(docRef, item);
-            }
-        }
-
-        // Toggle conditional contact field
-        window.toggleContactInfo = function(show) {
-            const container = document.getElementById('contactInfoContainer');
-            const inputField = document.getElementById('contactDetails');
-            if (show) {
-                container.classList.remove('hidden');
-                inputField.setAttribute('required', 'true');
-            } else {
-                container.classList.add('hidden');
-                inputField.removeAttribute('required');
-                inputField.value = '';
-            }
-        };
-
-        // Submit handler saving directly to Firestore and verifying write
-        window.handleFormSubmit = async function(event) {
-            event.preventDefault();
-
-            const checkedIssues = Array.from(document.querySelectorAll('input[name="issueType"]:checked')).map(el => el.value);
-            const issueError = document.getElementById('issueError');
-            
-            if (checkedIssues.length === 0) {
-                issueError.classList.remove('hidden');
-                issueError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            } else {
-                issueError.classList.add('hidden');
-            }
-
-            const severityEl = document.querySelector('input[name="severity"]:checked');
-            const wantContactEl = document.querySelector('input[name="wantContact"]:checked');
-            if (!severityEl || !wantContactEl) return;
-
-            const submitBtn = document.getElementById('submitBtn');
-            const submitBtnText = document.getElementById('submitBtnText');
-            submitBtn.disabled = true;
-            submitBtnText.innerText = 'Đang đồng bộ lên Đám mây...';
-
-            try {
-                if (!currentUser && auth) {
-                    await signInAnonymously(auth);
-                    currentUser = auth.currentUser;
-                }
-
-                // Fetch latest list from cloud before generating ID so mobile & PC never overwrite each other
-                if (db && currentUser) {
-                    const reportsRef = collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME);
-                    const latestSnap = await getDocs(reportsRef);
-                    const latestList = [];
-                    latestSnap.forEach(d => latestList.push({ docId: d.id, ...d.data() }));
-                    if (latestList.length > 0) {
-                        allCloudReports = latestList;
-                    }
-                }
-
-                const now = new Date();
-                const timeStr = now.toLocaleDateString('vi-VN') + ' ' + now.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'});
-                
-                // Generate unique tracking code PA-2026-XXX
-                let maxNum = allCloudReports.reduce((max, item) => {
-                    const match = String(item.id || '').match(/PA-2026-(\d+)/);
-                    const num = match ? parseInt(match[1], 10) : 0;
-                    return num > max ? num : max;
-                }, 0);
-                const newId = 'PA-2026-' + String(maxNum + 1).padStart(3, '0');
-
-                const newReport = {
-                    id: newId,
-                    time: timeStr,
+                var newEntry = {
+                    id: nextId,
+                    time: timeFormatted,
                     createdAt: Date.now(),
-                    type: checkedIssues.join(', '),
-                    description: document.getElementById('description').value.trim() || 'Không mô tả chi tiết',
-                    timeLocation: document.getElementById('timeLocation').value.trim() || 'Chưa rõ thời gian/địa điểm',
-                    severity: severityEl.value,
-                    contact: wantContactEl.value === 'Có' ? document.getElementById('contactDetails').value.trim() : 'Không yêu cầu liên hệ trực tiếp',
-                    additionalInfo: document.getElementById('additionalInfo').value.trim() || '',
-                    status: 'Mới tiếp nhận',
-                    deviceSource: detectDeviceLabel(),
-                    submittedByUid: currentUser ? currentUser.uid : 'anonymous'
+                    updatedAt: Date.now(),
+                    device: getDeviceName(),
+                    type: selectedIssues.join(', '),
+                    risk: riskVal,
+                    description: (document.getElementById('q2Description').value || '').trim() || 'Không ghi mô tả chi tiết',
+                    location: (document.getElementById('q3TimeLocation').value || '').trim() || 'Chưa rõ thời gian/địa điểm',
+                    contact: wantContactVal === 'Có' ? contactInput.value.trim() : 'Không yêu cầu liên hệ trực tiếp',
+                    additional: (document.getElementById('q7Additional').value || '').trim(),
+                    assignee: riskVal.indexOf('ĐỎ') !== -1 ? 'Đầu mối: Đinh Đức Thắng' : 'Tổ Tư vấn HCT',
+                    status: 'Mới tiếp nhận'
                 };
 
-                if (db && currentUser) {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, newId);
-                    await setDoc(docRef, newReport);
-                    showToast(`✅ Đã lưu phản ánh ${newId} lên Đám mây thành công!`);
-                } else {
-                    allCloudReports.unshift(newReport);
-                    renderAdminTable();
-                    showToast(`⚠️ Đã lưu tạm thời ${newId} (Chế độ Cục bộ)`);
+                reportsList.unshift(newEntry);
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+
+                var syncedOk = await window.pushReportsToCloud(newEntry);
+
+                // Prepare Success Modal + Instant QR Sync Packet
+                var packet = encodeBase64Json(newEntry);
+                document.getElementById('hiddenSyncPacket').value = packet;
+                document.getElementById('successTrackingCode').textContent = nextId;
+
+                var syncUrl = window.location.href.split('?')[0] + '?room=' + encodeURIComponent(currentRoom) + '&syncPacket=' + encodeURIComponent(packet);
+                document.getElementById('successSyncQrImg').src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(syncUrl);
+
+                var notice = document.getElementById('successCloudNotice');
+                if (notice) {
+                    notice.textContent = syncedOk
+                        ? '✅ Đã đồng bộ lên Đám mây ' + currentRoom + '! Máy tính Quản trị sẽ nhận được ngay lập tức.'
+                        : '⚡ Đã lưu phản ánh ' + nextId + ' và tạo Gói Đồng Bộ Nhanh bên dưới!';
                 }
 
-                document.getElementById('generatedCode').innerText = newId;
-                document.getElementById('copyNotice').classList.add('hidden');
-                document.getElementById('successModal').classList.remove('hidden');
-                
-                document.getElementById('reportForm').reset();
-                window.toggleContactInfo(false);
-            } catch (error) {
-                console.error("Error saving report:", error);
-                showToast('Có lỗi khi gửi dữ liệu: ' + error.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtnText.innerText = 'Gửi Phản Ánh An Toàn';
-            }
-        };
+                // Reset form
+                document.getElementById('safeReportForm').reset();
+                window.toggleQ6Contact(false);
+                window.handleRiskChange('YELLOW');
 
-        // QR & Share URL Modal Handlers
-        window.openQrShareModal = function() {
-            const currentUrl = window.location.href;
-            const inputEl = document.getElementById('qrUrlInput');
-            const qrImg = document.getElementById('qrCodeImg');
-            document.getElementById('copyShareUrlNotice').classList.add('hidden');
+                if (btn) btn.disabled = false;
+                if (btnText) btnText.textContent = 'Gửi Phản Ánh An Toàn';
 
-            if (inputEl) inputEl.value = currentUrl;
-            if (qrImg) {
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(currentUrl)}`;
-            }
-            document.getElementById('qrShareModal').classList.remove('hidden');
-        };
+                window.openModal('successModal');
+            };
 
-        window.closeQrShareModal = function() {
-            document.getElementById('qrShareModal').classList.add('hidden');
-        };
+            // 6. LOOKUP TRACKING CODE
+            window.performLookup = async function() {
+                var input = document.getElementById('lookupInput');
+                var box = document.getElementById('lookupResultContainer');
+                if (!input || !box) return;
+                var code = input.value.trim().toUpperCase();
+                box.classList.remove('hidden');
 
-        window.updateQrFromInput = function() {
-            const val = document.getElementById('qrUrlInput').value.trim();
-            const qrImg = document.getElementById('qrCodeImg');
-            if (val && qrImg) {
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(val)}`;
-            }
-        };
-
-        window.copyShareUrl = function() {
-            const inputEl = document.getElementById('qrUrlInput');
-            inputEl.select();
-            document.execCommand('copy');
-            document.getElementById('copyShareUrlNotice').classList.remove('hidden');
-        };
-
-        // Export & Import JSON backup tools
-        window.exportReportsJson = function() {
-            const dataStr = JSON.stringify(allCloudReports, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `phan-anh-an-toan-HCT-${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('Đã tải xuống file JSON sao lưu dữ liệu!');
-        };
-
-        window.importReportsJson = async function(event) {
-            const file = event.target.files?.[0];
-            if (!file) return;
-            try {
-                const text = await file.text();
-                const imported = JSON.parse(text);
-                if (!Array.isArray(imported)) {
-                    showToast('File JSON không hợp lệ!');
+                if (!code) {
+                    box.innerHTML = '<p class="text-rose-600 font-bold">Vui lòng nhập mã phản ánh (VD: PA-2026-001).</p>';
                     return;
                 }
-                for (const item of imported) {
-                    const key = item.id || ('PA-2026-' + Math.floor(Math.random() * 900 + 100));
-                    if (db && currentUser) {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, key);
-                        await setDoc(docRef, { ...item, id: key });
-                    } else {
-                        allCloudReports.unshift({ ...item, id: key });
-                    }
+
+                await window.syncFromCloudNow(false);
+
+                var found = reportsList.find(function(r) { return String(r.id).toUpperCase() === code; });
+                if (!found) {
+                    box.innerHTML = '<p class="text-rose-600 font-bold"><i class="fa-solid fa-circle-xmark mr-1"></i>Không tìm thấy mã <strong>' + code + '</strong> trên kênh ' + currentRoom + '.</p>';
+                    return;
                 }
-                renderAdminTable();
-                showToast(`Đã nhập và đồng bộ ${imported.length} phản ánh thành công!`);
-            } catch (err) {
-                console.error("Import JSON error:", err);
-                showToast('Lỗi khi đọc file JSON!');
-            } finally {
-                event.target.value = '';
-            }
-        };
 
-        // Copy tracking code using execCommand for iframe compatibility
-        window.copyTrackingCode = function() {
-            const codeText = document.getElementById('generatedCode').innerText;
-            const tempInput = document.createElement('input');
-            tempInput.value = codeText;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            document.getElementById('copyNotice').classList.remove('hidden');
-        };
+                box.innerHTML =
+                    '<div class="flex justify-between items-center border-b border-slate-200 pb-2">' +
+                        '<span class="font-mono font-black text-hct-navy text-sm">' + found.id + '</span>' +
+                        '<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full text-[11px]">' + found.status + '</span>' +
+                    '</div>' +
+                    '<p><strong>Thời điểm tiếp nhận:</strong> ' + found.time + ' (' + (found.device || 'Thiết bị') + ')</p>' +
+                    '<p><strong>Phân loại:</strong> ' + found.type + '</p>' +
+                    '<p><strong>Mức ưu tiên:</strong> ' + found.risk + '</p>' +
+                    '<p><strong>Cán bộ phụ trách:</strong> <span class="text-hct-navy font-bold">' + (found.assignee || 'Đang phân công') + '</span></p>';
+            };
 
-        // Lookup tracking code modal functions
-        window.openLookupModal = function() {
-            document.getElementById('lookupModal').classList.remove('hidden');
-            document.getElementById('lookupResultBox').classList.add('hidden');
-        };
-
-        window.closeLookupModal = function() {
-            document.getElementById('lookupModal').classList.add('hidden');
-        };
-
-        window.handleLookupCode = async function() {
-            const code = document.getElementById('lookupCodeInput').value.trim().toUpperCase();
-            const box = document.getElementById('lookupResultBox');
-            box.classList.remove('hidden');
-
-            if (!code) {
-                box.innerHTML = `<p class="text-rose-600 font-semibold">Vui lòng nhập mã phản ánh cần tra cứu.</p>`;
-                return;
+            // 7. ADMIN DASHBOARD TABLE & ACTIONS
+            function getRiskBadgeHtml(riskStr) {
+                var s = String(riskStr || '');
+                if (s.indexOf('ĐỎ') !== -1) {
+                    return '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-rose-100 text-rose-700 border border-rose-300">🔴 Mức ĐỎ (Khẩn cấp)</span>';
+                }
+                if (s.indexOf('CAM') !== -1) {
+                    return '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">🟠 Mức CAM (Nguy cơ cao)</span>';
+                }
+                return '<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-sky-100 text-sky-800 border border-sky-300">🟡 Mức VÀNG (Theo dõi)</span>';
             }
 
-            // Refresh from cloud first to ensure newest status
-            if (db && currentUser) {
+            window.renderAdminTable = function() {
+                var tbody = document.getElementById('adminTableBody');
+                if (!tbody) return;
+
+                var q = (document.getElementById('adminSearchInput')?.value || '').trim().toLowerCase();
+                var riskFilter = document.getElementById('adminFilterRisk')?.value || 'ALL';
+                var statusFilter = document.getElementById('adminFilterStatus')?.value || 'ALL';
+
+                var filtered = reportsList.filter(function(r) {
+                    var matchRisk = riskFilter === 'ALL' || String(r.risk || '').indexOf(riskFilter) !== -1;
+                    var matchStatus = statusFilter === 'ALL' || r.status === statusFilter;
+                    var textBlob = (r.id + ' ' + r.type + ' ' + r.description + ' ' + r.location + ' ' + r.contact + ' ' + r.assignee).toLowerCase();
+                    var matchSearch = !q || textBlob.indexOf(q) !== -1;
+                    return matchRisk && matchStatus && matchSearch;
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="p-8 text-center text-slate-400 font-semibold">Không có phản ánh nào phù hợp với bộ lọc hiện tại.</td></tr>';
+                    return;
+                }
+
+                var statusOptions = ['Mới tiếp nhận', 'Đang sàng lọc', 'Đang hỗ trợ', 'Chuyển cấp', 'Hoàn tất'];
+
+                tbody.innerHTML = filtered.map(function(r) {
+                    var optionsHtml = statusOptions.map(function(st) {
+                        var sel = r.status === st ? 'selected' : '';
+                        return '<option value="' + st + '" ' + sel + '>' + st + '</option>';
+                    }).join('');
+
+                    return '<tr class="hover:bg-slate-50/90 transition align-top">' +
+                        '<td class="p-3.5 font-mono font-black text-hct-navy whitespace-nowrap">' + r.id + '</td>' +
+                        '<td class="p-3.5 whitespace-nowrap">' +
+                            '<div class="font-bold text-slate-800">' + r.time + '</div>' +
+                            '<div class="text-[11px] text-slate-500 mt-0.5">' + (r.device || '📱 Thiết bị') + '</div>' +
+                        '</td>' +
+                        '<td class="p-3.5 whitespace-nowrap">' + getRiskBadgeHtml(r.risk) + '</td>' +
+                        '<td class="p-3.5 max-w-xs space-y-1">' +
+                            '<div class="font-extrabold text-slate-900">' + r.type + '</div>' +
+                            '<p class="text-slate-600 leading-relaxed">' + r.description + '</p>' +
+                            '<p class="text-[11px] text-slate-500"><i class="fa-solid fa-location-dot mr-1 text-sky-600"></i>' + (r.location || 'Chưa rõ') + '</p>' +
+                            (r.additional ? '<p class="text-[11px] bg-sky-50 text-sky-900 px-2 py-1 rounded border border-sky-200"><strong>Đề xuất:</strong> ' + r.additional + '</p>' : '') +
+                        '</td>' +
+                        '<td class="p-3.5 text-slate-700 max-w-[160px]">' + r.contact + '</td>' +
+                        '<td class="p-3.5 whitespace-nowrap">' +
+                            '<input type="text" value="' + (r.assignee || 'Đinh Đức Thắng') + '" onchange="window.updateAssignee(\'' + r.id + '\', this.value)" class="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-semibold text-slate-800 w-40 focus:border-hct-navy outline-none">' +
+                        '</td>' +
+                        '<td class="p-3.5 whitespace-nowrap">' +
+                            '<select onchange="window.updateStatus(\'' + r.id + '\', this.value)" class="rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 font-bold px-2.5 py-1.5 text-xs outline-none">' +
+                                optionsHtml +
+                            '</select>' +
+                        '</td>' +
+                        '<td class="p-3.5 text-center">' +
+                            '<button type="button" onclick="window.deleteReportById(\'' + r.id + '\')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg transition cursor-pointer" title="Xóa">' +
+                                '<i class="fa-solid fa-trash-can"></i>' +
+                            '</button>' +
+                        '</td>' +
+                    '</tr>';
+                }).join('');
+            };
+
+            window.updateStatus = async function(id, newStatus) {
+                var item = reportsList.find(function(r) { return r.id === id; });
+                if (item) {
+                    item.status = newStatus;
+                    item.updatedAt = Date.now();
+                    window.updateCountersAndBadges(true);
+                    window.renderAdminTable();
+                    await window.pushReportsToCloud(null);
+                    window.showToast('Đã cập nhật trạng thái ' + id + ' -> ' + newStatus);
+                }
+            };
+
+            window.updateAssignee = async function(id, newAssignee) {
+                var item = reportsList.find(function(r) { return r.id === id; });
+                if (item) {
+                    item.assignee = newAssignee;
+                    item.updatedAt = Date.now();
+                    await window.pushReportsToCloud(null);
+                    window.showToast('Đã phân công ' + id + ' cho: ' + newAssignee);
+                }
+            };
+
+            window.deleteReportById = async function(id) {
+                reportsList = reportsList.filter(function(r) { return r.id !== id; });
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+                await window.pushReportsToCloud(null);
+                window.showToast('Đã xóa phản ánh ' + id);
+            };
+
+            window.loadSixDemoScenarios = async function() {
+                var demos = getSixOfficialScenarios();
+                reportsList = mergeReportArrays(demos, reportsList);
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+                await window.pushReportsToCloud(null);
+                window.showToast('✅ Đã nạp 06 tình huống diễn tập chuẩn hồ sơ dự thi!');
+            };
+
+            window.clearAllReportsPrompt = async function() {
+                reportsList = [];
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+                await window.pushReportsToCloud(null);
+                window.showToast('Đã làm trống danh sách phản ánh.');
+            };
+
+            window.applyImportedPacket = async function() {
+                var raw = (document.getElementById('importPacketText')?.value || '').trim();
+                if (!raw) return;
                 try {
-                    const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME));
-                    const list = [];
-                    snap.forEach(d => list.push({ docId: d.id, ...d.data() }));
-                    allCloudReports = list;
+                    if (raw.indexOf('syncPacket=') !== -1) {
+                        raw = decodeURIComponent(raw.split('syncPacket=')[1].split('&')[0]);
+                    }
+                    var decoded = decodeBase64Json(raw);
+                    if (decoded && decoded.id) {
+                        reportsList = mergeReportArrays([decoded], reportsList);
+                        window.updateCountersAndBadges(true);
+                        window.renderAdminTable();
+                        await window.pushReportsToCloud(decoded);
+                        window.closeModal('importPacketModal');
+                        window.showToast('⚡ Đã nạp phản ánh ' + decoded.id + ' từ Điện thoại thành công!');
+                    }
                 } catch (e) {
-                    console.error(e);
+                    window.showToast('❌ Mã Gói Đồng Bộ không hợp lệ!');
                 }
-            }
+            };
 
-            const found = allCloudReports.find(r => String(r.id).toUpperCase() === code);
-            if (!found) {
-                box.innerHTML = `<p class="text-rose-600 font-semibold"><i class="fa-solid fa-circle-xmark mr-1"></i>Không tìm thấy mã phản ánh <strong>${code}</strong> trên hệ thống.</p>`;
-                return;
-            }
+            window.exportToCsv = function() {
+                var headers = ['Mã PA', 'Thời gian', 'Thiết bị', 'Loại phản ánh', 'Mức ưu tiên', 'Nội dung', 'Địa điểm', 'Liên hệ', 'Người phụ trách', 'Trạng thái'];
+                var rows = reportsList.map(function(r) {
+                    return [r.id, r.time, r.device, r.type, r.risk, r.description, r.location, r.contact, r.assignee, r.status].map(function(cell) {
+                        return '"' + String(cell || '').replace(/"/g, '""') + '"';
+                    }).join(',');
+                });
+                var csvContent = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n');
+                var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'So-Theo-Doi-Lang-Nghe-An-Toan-HCT-2026.csv';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.showToast('📥 Đã tải xuống file Excel/CSV thành công!');
+            };
 
-            box.innerHTML = `
-                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span class="font-mono font-extrabold text-brand-600 text-sm">${found.id}</span>
-                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">${found.status}</span>
-                </div>
-                <p class="text-slate-600"><strong>Thời điểm tiếp nhận:</strong> ${found.time}</p>
-                <p class="text-slate-600"><strong>Nhóm vấn đề:</strong> ${found.type}</p>
-                <p class="text-slate-600"><strong>Mức độ:</strong> ${found.severity}</p>
-            `;
-        };
+            // 8. AUTO-INIT ON DOM READY
+            document.addEventListener('DOMContentLoaded', function() {
+                // Check if URL has an instant sync packet from QR scan
+                var syncPacketParam = urlParams.get('syncPacket');
+                if (syncPacketParam) {
+                    try {
+                        var incomingObj = decodeBase64Json(syncPacketParam);
+                        if (incomingObj && incomingObj.id) {
+                            reportsList = mergeReportArrays([incomingObj], reportsList);
+                            window.pushReportsToCloud(incomingObj);
+                            window.showToast('⚡ Đã tự động đồng bộ phản ánh ' + incomingObj.id + ' từ QR!');
+                        }
+                    } catch (err) {}
+                }
 
-        window.closeSuccessModal = function() {
-            document.getElementById('successModal').classList.add('hidden');
-        };
+                window.updateCountersAndBadges(true);
+                window.renderAdminTable();
+                window.syncFromCloudNow(false);
 
-        window.openEmergencyModal = function() {
-            document.getElementById('emergencyModal').classList.remove('hidden');
-        };
-
-        window.closeEmergencyModal = function() {
-            document.getElementById('emergencyModal').classList.add('hidden');
-        };
-
-        window.openAdminLogin = function() {
-            document.getElementById('adminLoginError').classList.add('hidden');
-            document.getElementById('adminLoginModal').classList.remove('hidden');
-        };
-
-        window.closeAdminLogin = function() {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('adminLoginError').classList.add('hidden');
-        };
-
-        window.verifyAdminLogin = function() {
-            const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === 'admin123' || pass === '') {
-                window.closeAdminLogin();
-                window.openAdminDashboard();
-            } else {
-                document.getElementById('adminLoginError').classList.remove('hidden');
-            }
-        };
-
-        window.openAdminDashboard = function() {
-            window.manualRefreshCloud();
-            document.getElementById('adminDashboardModal').classList.remove('hidden');
-        };
-
-        window.closeAdminDashboard = function() {
-            document.getElementById('adminDashboardModal').classList.add('hidden');
-        };
-
-        // Update report status directly in Firestore
-        window.updateReportStatus = async function(docId, newStatus) {
-            if (!db || !currentUser) return;
-            try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, docId);
-                await updateDoc(docRef, { status: newStatus });
-                showToast(`Đã cập nhật trạng thái ${docId} sang "${newStatus}"`);
-            } catch (e) {
-                console.error("Update status error:", e);
-                showToast('Lỗi khi cập nhật trạng thái!');
-            }
-        };
-
-        // Delete a single report
-        window.deleteSingleReport = async function(docId) {
-            if (!db || !currentUser) return;
-            try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, docId);
-                await deleteDoc(docRef);
-                showToast(`Đã xóa phản ánh ${docId}`);
-            } catch (e) {
-                console.error("Delete report error:", e);
-            }
-        };
-
-        function getSeverityBadge(severityStr = '') {
-            if (severityStr.includes('khẩn cấp')) {
-                return { code: 'ĐỎ', label: 'Mức ĐỎ – Khẩn cấp', classes: 'bg-rose-100 text-rose-700 border-rose-200' };
-            }
-            if (severityStr.includes('leo thang')) {
-                return { code: 'CAM', label: 'Mức CAM – Nguy cơ cao', classes: 'bg-amber-100 text-amber-800 border-amber-200' };
-            }
-            return { code: 'VÀNG', label: 'Mức VÀNG – Cần theo dõi', classes: 'bg-sky-100 text-sky-800 border-sky-200' };
-        }
-
-        window.renderAdminTable = function() {
-            const tbody = document.getElementById('adminTableBody');
-            const totalEl = document.getElementById('totalReportsCount');
-            if (!tbody || !totalEl) return;
-
-            const sevFilter = document.getElementById('filterSeverity')?.value || 'ALL';
-            const statusFilter = document.getElementById('filterStatus')?.value || 'ALL';
-
-            const filtered = allCloudReports.filter(r => {
-                const badge = getSeverityBadge(r.severity);
-                const matchSev = sevFilter === 'ALL' || badge.code === sevFilter;
-                const matchStatus = statusFilter === 'ALL' || r.status === statusFilter;
-                return matchSev && matchStatus;
+                // Poll cloud every 3.5 seconds for real-time Phone -> PC updates
+                setInterval(function() {
+                    window.syncFromCloudNow(false);
+                }, 3500);
             });
-
-            totalEl.innerText = filtered.length;
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Không có phản ánh nào khớp với bộ lọc hiện tại.</td></tr>`;
-                return;
-            }
-
-            const statuses = ['Mới tiếp nhận', 'Đang sàng lọc', 'Đang hỗ trợ', 'Chuyển cấp', 'Hoàn tất'];
-
-            tbody.innerHTML = filtered.map(r => {
-                const badge = getSeverityBadge(r.severity);
-                const docKey = r.docId || r.id;
-                const deviceTag = r.deviceSource || '📱 Thiết bị';
-                return `
-                <tr class="hover:bg-slate-50 transition border-b border-slate-100 align-top">
-                    <td class="p-3.5 font-mono font-bold text-brand-600 whitespace-nowrap">${r.id}</td>
-                    <td class="p-3.5 text-slate-600 whitespace-nowrap text-xs">
-                        <div class="font-semibold text-slate-800">${r.time}</div>
-                        <div class="text-[11px] text-slate-400 mt-0.5">${deviceTag}</div>
-                    </td>
-                    <td class="p-3.5 space-y-1 max-w-xs">
-                        <div class="text-slate-900 font-bold">${r.type}</div>
-                        ${r.description ? `<p class="text-xs text-slate-600 leading-relaxed">${r.description}</p>` : ''}
-                        ${r.timeLocation ? `<p class="text-[11px] text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i>${r.timeLocation}</p>` : ''}
-                        ${r.additionalInfo ? `<p class="text-[11px] text-sky-700 bg-sky-50 px-2 py-1 rounded-lg border border-sky-100">Góp ý: ${r.additionalInfo}</p>` : ''}
-                    </td>
-                    <td class="p-3.5 whitespace-nowrap">
-                        <span class="inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold border ${badge.classes}">
-                            ${badge.label}
-                        </span>
-                    </td>
-                    <td class="p-3.5 text-slate-700 text-xs">${r.contact}</td>
-                    <td class="p-3.5 whitespace-nowrap">
-                        <select onchange="updateReportStatus('${docKey}', this.value)" class="text-xs font-bold rounded-xl px-2.5 py-1.5 border border-emerald-200 bg-emerald-50 text-emerald-800 outline-none focus:ring-2 focus:ring-brand-500">
-                            ${statuses.map(st => `<option value="${st}" ${r.status === st ? 'selected' : ''}>${st}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td class="p-3.5 text-center">
-                        <button onclick="deleteSingleReport('${docKey}')" class="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg transition" title="Xóa phản ánh">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                </tr>
-            `}).join('');
-        };
-
-        window.loadSampleData = async function() {
-            await seedInitialDemoReports();
-            showToast('Đã nạp dữ liệu mẫu lên Đám mây!');
-        };
-
-        window.openConfirmClearModal = function() {
-            document.getElementById('confirmClearModal').classList.remove('hidden');
-        };
-
-        window.closeConfirmClearModal = function() {
-            document.getElementById('confirmClearModal').classList.add('hidden');
-        };
-
-        window.confirmClearAllReports = async function() {
-            window.closeConfirmClearModal();
-            if (!db || !currentUser) return;
-            try {
-                for (const item of allCloudReports) {
-                    const key = item.docId || item.id;
-                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', COLLECTION_NAME, key));
-                }
-                showToast('Đã xóa toàn bộ danh sách phản ánh trên Đám mây.');
-            } catch (e) {
-                console.error("Clear error:", e);
-            }
-        };
-
-        // Start Firebase when window loads
-        window.addEventListener('DOMContentLoaded', initCloudSystem);
+        })();
     </script>
 </body>
 </html>
